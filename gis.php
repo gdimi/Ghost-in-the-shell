@@ -101,7 +101,7 @@ class Scanner {
 
 
 	function __construct($f2s,$eol,$htmlMode,$scannerOptions) {
-		$this->logfile = "gis-".date("now").".log"; //default log filename
+		$this->logfile = "gis-".date("Y-m-d_H:i:s").".log"; //default log filename
 		file_put_contents($this->logfile," "); //erase logfile if already exists
 		$this->lparms = 'full'; //default logging is full
 		if ($f2s) { //if there is a file to scan, load it
