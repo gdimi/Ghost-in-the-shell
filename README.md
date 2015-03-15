@@ -1,4 +1,4 @@
-# Ghost-in-the-shell
+# Ghost in the Shell
 Ghost in the shell php file security scanner
 
 ## info
