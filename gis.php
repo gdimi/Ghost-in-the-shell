@@ -25,10 +25,10 @@ common patterns, dirs and files that may be present on a site or webapp,
 and ofcourse, evaled of encoded php code 
 
 @usage:
-gis.php file_to_scan
-gis.php dir_to_scan
-gis.php (inside a dir to scan with an "." as argument scans everything inside that dir including subdirs)
-gis.php -o<options> file_or_dir_to_scan
+php gis.php file_to_scan
+php gis.php dir_to_scan
+php gis.php (inside a dir to scan with an "." as argument scans everything inside that dir including subdirs)
+php gis.php -o<options> file_or_dir_to_scan
 options:
 f = full log
 n = filename only log
