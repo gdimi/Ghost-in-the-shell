@@ -475,6 +475,8 @@ if (file_exists($o2s)) {
 } else {
     $ainfo = "The file/folder ${bS}${o2s}${bE} does not exist";
 }
+//translate . to path if o2s eq .
+if ($o2s == '.') { $o2s = __DIR__; }
 
 //show results 
 if ($scanner->getOutput() == 'html') { ?>
