@@ -479,7 +479,7 @@ if (file_exists($o2s)) {
 if ($o2s == '.') { $o2s = __DIR__; }
 
 //show results 
-if ($scanner->getOutput() == 'html') { ?>
+if ((is_object($scanner) && $scanner->getOutput() == 'html') || $htmlMode) { ?>
 <html>
 	<head>
 		<title>Ghost In the Shell - php file security scanner</title>
@@ -542,7 +542,7 @@ if ($scanner->getOutput() == 'html') { ?>
 	</body>
 </html>
 <?php 
-} elseif ($scanner->getOutput() == 'cli') {
+} else {
 	echo PHP_EOL."$blue ".'* Ghost In the Shell php security file scanner*'." $RST".PHP_EOL.PHP_EOL;
 	drawLine(40,"=");
 	echo PHP_EOL.boxMsgCenter("$o2s info","|",$bS).PHP_EOL;
