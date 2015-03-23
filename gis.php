@@ -3,7 +3,7 @@
  * Ghost In the Shell
  * a php file security scanner
  * by George Dimitrakopoulos 2015
- * version 0.57alpha
+ * version 0.59alpha
 @copyright
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -23,6 +23,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 This is a security scanner for php. Nothing fancy, just checks for some 
 common patterns, dirs and files that may be present on a site or webapp, 
 and ofcourse, evaled of encoded php code 
+Requires php 5.4+
 
 @usage:
 php gis.php file_to_scan
@@ -38,7 +39,7 @@ a = scan all files not only php
 i = scan for fake images (php scripts with image filename/extension)
 **********************************/
 
-$version = "0.57";
+$version = "0.59";
 
 //data to test
 $stringData = 'r0nin|m0rtix|upl0ad|r57shell|c99shell|shellbot|phpshell|void\.ru|phpremoteview|directmail|bash_history|multiviews|cwings|vandal|bitchx|eggdrop|guardservices|psybnc|dalnet|undernet|vulnscan|spymeta|raslan58|Webshell|str_rot13|FilesMan|FilesTools|Web Shell|ifrm|bckdrprm|hackmeplz|wrgggthhd|WSOsetcookie|Hmei7|Inbox Mass Mailer|HackTeam|Hackeado';
@@ -349,7 +350,7 @@ $ainfo = ''; //general error or info
 $found = ''; //holds temp found results
 $o2s = ''; //object to scan
 $scannerOptions = ''; //scanner..options...
-$fdf = array();
+$perc = 0; //percentage finished
 
 //get the arguments from either cli or apache2handler etc
 if (PHP_SAPI === 'cli') {
@@ -420,17 +421,33 @@ if ($numOfargz < 2 || $scannerOptions == '--help' || $o2s == '--help') {
 
 //get the object's info
 if (file_exists($o2s)) {
+	if (!$htmlMode) { // FIXME when output option is silent???
+		fwrite(STDOUT,PHP_EOL."$blue ".'* Ghost In the Shell php security file scanner*'." $RST".PHP_EOL.PHP_EOL);
+		fwrite(STDOUT,"please wait while scanning...".PHP_EOL);
+	}
     if (is_dir($o2s)) {
 		$scanner = new Scanner($o2s,$eol,$htmlMode,$scannerOptions);
 		$scanner->getDirContents($o2s,true);
-
-		$output = "List: ".count($scanner->files)." files ".$eol;
-
+		$totalFiles = count($scanner->files);
+		$output = "List: ".$totalFiles." files ".$eol;
+		if (!$htmlMode && $scanner->getOutput() != 'silent') {
+			fwrite(STDOUT,"Scanning ".$totalFiles." files".PHP_EOL);
+		}
+		$counter = 0;
 		foreach ($scanner->files as $key=>$val) {
 			if (is_array($val)) {
 				foreach ($val as $k2=>$v2) {
-					$f2s = $key.'/'.$v2;
+					$f2s = $key.'/'.$v2; //key is path, v2 is filename
 					if (substr($f2s,-3) == 'php' && substr($f2s,-7) != 'gis.php') {
+						if (!$htmlMode && $scanner->getOutput() != 'silent') {
+							$counter++;
+							$perc = round((100*($counter/$totalFiles)/2), 1, PHP_ROUND_HALF_EVEN); //TODO find out why there are x2 checks???
+							$firstDigit = $totalFiles[0]; //substr("$totalFiles",0,1); get first digit to calc modulus better
+							$modulo = fmod($perc,$firstDigit);
+							if ($modulo == 0) {
+								fwrite(STDOUT,$perc."%..");
+							}
+						}
 						//$output .= 'File: '.$f2s.PHP_EOL;
 						$scanner->setNewf2s($f2s);
 						$scanner->scanFile("all",$patternData,$stringData);
@@ -542,8 +559,9 @@ if ((is_object($scanner) && $scanner->getOutput() == 'html') || $htmlMode) { ?>
 	</body>
 </html>
 <?php 
-} else {
-	echo PHP_EOL."$blue ".'* Ghost In the Shell php security file scanner*'." $RST".PHP_EOL.PHP_EOL;
+} else { //FIXME if output is silent???
+	//echo PHP_EOL."$blue ".'* Ghost In the Shell php security file scanner*'." $RST".PHP_EOL.PHP_EOL;
+	echo PHP_EOL;
 	drawLine(40,"=");
 	echo PHP_EOL.boxMsgCenter("$o2s info","|",$bS).PHP_EOL;
 	drawLine(40,"=");
