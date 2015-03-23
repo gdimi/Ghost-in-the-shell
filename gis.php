@@ -344,6 +344,9 @@ i = scan for fake images (php scripts with image filename/extension)'.$eol;
 	exit(1);
 }
 
+//set default timezone just in case
+date_default_timezone_set('Europe/Athens');
+
 //init some vars
 $htmlMode = false;
 $ainfo = ''; //general error or info
