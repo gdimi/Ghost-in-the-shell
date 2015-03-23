@@ -5,6 +5,7 @@ Ghost in the shell php file security scanner
 This is a security scanner for php. Nothing fancy, just checks for some 
 common patterns, dirs and files that may be present on a site or webapp, 
 and ofcourse, evaled of encoded php code 
+Requires php version 5.4+
 
 ## usage:
 
