@@ -498,6 +498,8 @@ if (file_exists($o2s)) {
 //translate . to path if o2s eq .
 if ($o2s == '.') { $o2s = __DIR__; }
 
+$line_len = strlen($o2s)+6; //get the line lenght in chars plus 4 chars for input and 2 for spaces for correct graphics in cli mode
+
 //show results 
 if ((is_object($scanner) && $scanner->getOutput() == 'html') || $htmlMode) { ?>
 <html>
@@ -565,15 +567,19 @@ if ((is_object($scanner) && $scanner->getOutput() == 'html') || $htmlMode) { ?>
 } else { //FIXME if output is silent???
 	//echo PHP_EOL."$blue ".'* Ghost In the Shell php security file scanner*'." $RST".PHP_EOL.PHP_EOL;
 	echo PHP_EOL;
-	drawLine(40,"=");
+	drawLine($line_len,"=");
 	echo PHP_EOL.boxMsgCenter("$o2s info","|",$bS).PHP_EOL;
-	drawLine(40,"=");
+	drawLine($line_len,"=");
 	echo PHP_EOL.PHP_EOL;
 	if ($ainfo) { 
 		echo $ainfo.PHP_EOL; 
 	} else {
 		if (count($scanner->files) > 1) {
-			echo $output;
+            if ($output) {
+                echo $output;
+            } else {
+                echo "nothing found";
+            }
 		} else {
 			echo "Permissions: $perms".PHP_EOL;
 			echo "Owner      : $owner".PHP_EOL;
