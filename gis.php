@@ -438,6 +438,7 @@ if (file_exists($o2s)) {
 			fwrite(STDOUT,"Scanning ".$totalFiles." files".PHP_EOL);
 		}
 		$counter = 0;
+        $firstDigit = substr($totalFiles,0,1);
 		foreach ($scanner->files as $key=>$val) {
 			if (is_array($val)) {
 				foreach ($val as $k2=>$v2) {
@@ -445,11 +446,11 @@ if (file_exists($o2s)) {
 					if (substr($f2s,-3) == 'php' && substr($f2s,-7) != 'gis.php') {
 						if (!$htmlMode && $scanner->getOutput() != 'silent') {
 							$counter++;
-							$perc = round((100*($counter/$totalFiles)/2), 1, PHP_ROUND_HALF_EVEN); //TODO find out why there are x2 checks???
-							$firstDigit = $totalFiles[0]; //substr("$totalFiles",0,1); get first digit to calc modulus better
+							$perc = round((100*($counter/$totalFiles)), 1, PHP_ROUND_HALF_EVEN); //TODO find out why there are x2 checks???
 							$modulo = fmod($perc,$firstDigit);
 							if ($modulo == 0) {
-								fwrite(STDOUT,$perc."%..");
+								//fwrite(STDOUT,$perc."%..");
+								fwrite(STDOUT,"..");
 							}
 						}
 						//$output .= 'File: '.$f2s.PHP_EOL;
