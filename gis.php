@@ -3,7 +3,7 @@
  * Ghost In the Shell
  * a php file security scanner
  * by George Dimitrakopoulos 2015
- * version 0.59alpha
+ * version 0.60alpha
 @copyright
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -39,7 +39,7 @@ a = scan all files not only php
 i = scan for fake images (php scripts with image filename/extension)
 **********************************/
 
-$version = "0.59";
+$version = "0.60";
 
 //data to test
 $stringData = 'r0nin|m0rtix|upl0ad|r57shell|c99shell|shellbot|phpshell|void\.ru|phpremoteview|directmail|bash_history|multiviews|cwings|vandal|bitchx|eggdrop|guardservices|psybnc|dalnet|undernet|vulnscan|spymeta|raslan58|Webshell|str_rot13|FilesMan|FilesTools|Web Shell|ifrm|bckdrprm|hackmeplz|wrgggthhd|WSOsetcookie|Hmei7|Inbox Mass Mailer|HackTeam|Hackeado';
@@ -354,6 +354,7 @@ $found = ''; //holds temp found results
 $o2s = ''; //object to scan
 $scannerOptions = ''; //scanner..options...
 $perc = 0; //percentage finished
+$output = ''; //holds output if anything found
 
 //get the arguments from either cli or apache2handler etc
 if (PHP_SAPI === 'cli') {
@@ -432,7 +433,7 @@ if (file_exists($o2s)) {
 		$scanner = new Scanner($o2s,$eol,$htmlMode,$scannerOptions);
 		$scanner->getDirContents($o2s,true);
 		$totalFiles = count($scanner->files);
-		$output = "List: ".$totalFiles." files ".$eol;
+		$output_head = "List: ".$totalFiles." files ".$eol;
 		if (!$htmlMode && $scanner->getOutput() != 'silent') {
 			fwrite(STDOUT,"Scanning ".$totalFiles." files".PHP_EOL);
 		}
@@ -534,10 +535,10 @@ if ((is_object($scanner) && $scanner->getOutput() == 'html') || $htmlMode) { ?>
 					 <?php echo $ainfo; ?>
 				</span>
 				<?php } else { 
-					if ($output) { 
+					if (isset($output) && $output != '') { 
 				?>
 				<div>
-					<?php echo $output; ?>
+					<?php echo $ouput_head.$output; ?>
 				</div>
 				<?php } else { ?>
 				<div>
@@ -565,7 +566,6 @@ if ((is_object($scanner) && $scanner->getOutput() == 'html') || $htmlMode) { ?>
 </html>
 <?php 
 } else { //FIXME if output is silent???
-	//echo PHP_EOL."$blue ".'* Ghost In the Shell php security file scanner*'." $RST".PHP_EOL.PHP_EOL;
 	echo PHP_EOL;
 	drawLine($line_len,"=");
 	echo PHP_EOL.boxMsgCenter("$o2s info","|",$bS).PHP_EOL;
@@ -575,8 +575,8 @@ if ((is_object($scanner) && $scanner->getOutput() == 'html') || $htmlMode) { ?>
 		echo $ainfo.PHP_EOL; 
 	} else {
 		if (count($scanner->files) > 1) {
-            if ($output) {
-                echo $output;
+            if (isset($output) && $output !='') {
+                echo $output_head.$output;
             } else {
                 echo "nothing found";
             }
