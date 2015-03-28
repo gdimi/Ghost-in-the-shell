@@ -58,6 +58,7 @@ $patternData = [
 	'countimg.gif?id=4da620681febfa679b00b25f&p=1' => "MW:BACKDOOR:23, Malicious tracking code added to the page to notify attackers that a backdoor is present on that page.",
 	'rebots.php' => " A malware javascript (maljs) include call was identified in the site. It is used to load malware from the 'rebots.php' file and attempt to infect anyone visiting the site.",
     'eval(base64_decode("aWY', "MW:MROBH:1, Code used to insert a malicious javascript on many wordpress sites. Loading the malware from: http://www.indesignstudioinfo.com/ls.php http://zettapetta.com/js.php http://holasionweb.com/oo.php http://www.losotrana.com/js.php etc",
+    '#0247a1#',"PHP.Kryptik.AB : inserts a js to send stolen ftp passwords so to inject ads",
 	'eval('=>"general eval check",
 	'base64_decode'=>"general base64_decode check"
 ];
