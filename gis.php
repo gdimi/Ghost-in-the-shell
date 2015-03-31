@@ -506,6 +506,7 @@ if (file_exists($o2s)) {
 if ($o2s == '.') { $o2s = __DIR__; }
 
 $line_len = strlen($o2s)+6; //get the line lenght in chars plus 4 chars for input and 2 for spaces for correct graphics in cli mode
+if ($line_len < 40) { $line_len = 40; } //make sure is 40 chars long at least
 
 //show results 
 if ((is_object($scanner) && $scanner->getOutput() == 'html') || $htmlMode) { ?>
