@@ -60,6 +60,7 @@ $patternData = [
 	'preg_replace("/.*/e"'=>"possibly a Darkleech iFrame",
 	'preg_replace($f,strtr($rsa, $pka, $pkb)'=>"malicious redirect",
 	'rebots.php' => " A malware javascript (maljs) include call was identified in the site. It is used to load malware from the 'rebots.php' file and attempt to infect anyone visiting the site.",
+	'wp-core.php'=> "pharma-spam doorway",
     'eval(base64_decode("aWY'=> "MW:MROBH:1, Code used to insert a malicious javascript on many wordpress sites. Loading the malware from: http://www.indesignstudioinfo.com/ls.php http://zettapetta.com/js.php http://holasionweb.com/oo.php http://www.losotrana.com/js.php etc",
     '#0247a1#'=>"PHP.Kryptik.AB : inserts a js to send stolen ftp passwords so to inject ads",
     'edoced_46esab(lave'=> "usually it affects wordpress sites. Stores in database an entry difficult to see, retrieves its value, and creates a function to execute it. If you look at this string you'll see the base64_decode...",
