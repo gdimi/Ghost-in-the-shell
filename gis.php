@@ -42,7 +42,7 @@ i = scan for fake images (php scripts with image filename/extension)
 $version = "0.64";
 
 //data to test
-$stringData = 'r0nin|m0rtix|upl0ad|r57shell|c99shell|shellbot|phpshell|void\.ru|phpremoteview|directmail|bash_history|multiviews|cwings|vandal|bitchx|eggdrop|guardservices|psybnc|dalnet|undernet|vulnscan|spymeta|raslan58|Webshell|str_rot13|FilesMan|FilesTools|Web Shell|ifrm|bckdrprm|hackmeplz|wrgggthhd|WSOsetcookie|Hmei7|Inbox Mass Mailer|HackTeam|Hackeado';
+$stringData = 'r0nin|m0rtix|upl0ad|r57shell|c99shell|shellbot|phpshell|void\.ru|phpremoteview|directmail|bash_history|multiviews|cwings|vandal|bitchx|eggdrop|guardservices|psybnc|dalnet|undernet|vulnscan|spymeta|raslan58|Webshell|str_rot13|FilesMan|FilesTools|Web Shell|ifrm|bckdrprm|hackmeplz|wrgggthhd|WSOsetcookie|Hmei7|Inbox Mass Mailer|HackTeam|Hackeado|INVISION POWER BOARD';
 
 $patternData = [
 	'${"\x47\x4cO\x42A\x4c\x53"}' => "hex'd php code, 2 main classes: Config_File and pssarseCSV. Possible database/login credentials stealing, saves it to data.csv or if remotely called sets headers to application/csv. Tries to include several files ",
@@ -57,6 +57,8 @@ $patternData = [
 	'x65x76x61x6Cx28x67x7Ax69' => "Backdoor: PHP:PREG_REPLACE:EVAL, malicious code hidden under a preg_replace with the 'e' switch that acts as an eval call (code execution). It is often used to bypass simple detection methods that only look for 'eval(' call itself",
 	'preg_match("/bot/", $_SERVER[HTTP_USER_AGENT])' => "PHP:R57:01, backdoor that allows attackers to access, modify and reinfect your site. It is often hidden in the filesystem and hard to find without access to the server or logs. ",
 	'countimg.gif?id=4da620681febfa679b00b25f&p=1' => "MW:BACKDOOR:23, Malicious tracking code added to the page to notify attackers that a backdoor is present on that page.",
+	'preg_replace("/.*/e"'=>"possibly a Darkleech iFrame",
+	'preg_replace($f,strtr($rsa, $pka, $pkb)'=>"malicious redirect",
 	'rebots.php' => " A malware javascript (maljs) include call was identified in the site. It is used to load malware from the 'rebots.php' file and attempt to infect anyone visiting the site.",
     'eval(base64_decode("aWY'=> "MW:MROBH:1, Code used to insert a malicious javascript on many wordpress sites. Loading the malware from: http://www.indesignstudioinfo.com/ls.php http://zettapetta.com/js.php http://holasionweb.com/oo.php http://www.losotrana.com/js.php etc",
     '#0247a1#'=>"PHP.Kryptik.AB : inserts a js to send stolen ftp passwords so to inject ads",
