@@ -82,6 +82,7 @@ $fileData = [
 	'xx.txt' => "part of 0O0O hacks",
 	'c99.*' => "shell 99 file",
 	'r57.*' => "r57 backdoor file",
+	'.error0.php' => "mass spam mailer",
 	'.*' => "dot file"
 ];
 
@@ -197,7 +198,7 @@ class Scanner {
 
 			foreach ($patternData as $pattern => $info) {
 				if ($pos = strpos($line,$pattern)) { //$pos = character position in line
-					$chunk = substr($line,$pos,16);
+					$chunk = substr($line,$pos,32);
 					$this->found[] = "line - $line_num (char $pos): ".$chunk.' | '.$info.$this->eol;
 					$this->logit("line - $line_num (char $pos): ".$chunk.' | '.$info);
 				}
