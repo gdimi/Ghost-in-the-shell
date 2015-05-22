@@ -3,7 +3,7 @@
  * Ghost In the Shell
  * a php file security scanner
  * by George Dimitrakopoulos 2015
- * version 0.60alpha
+ * version 0.64alpha
 @copyright
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
