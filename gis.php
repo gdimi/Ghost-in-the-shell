@@ -65,6 +65,8 @@ $patternData = [
     '#0247a1#'=>"PHP.Kryptik.AB : inserts a js to send stolen ftp passwords so to inject ads",
     'edoced_46esab(lave'=> "usually it affects wordpress sites. Stores in database an entry difficult to see, retrieves its value, and creates a function to execute it. If you look at this string you'll see the base64_decode...",
     'b.a.s.e.6.4._d.e.c.o.d.e'=>"masked base64_decode",
+    '45vtcgxx.php'=>"backdoor to execute remotely arbitrary code.Part of the Asprox botnet.",
+    '78.138.118.126'=>"backdoor to execute remotely arbitrary code (see 45vtcgxx.php).Part of the Asprox botnet",
 	'eval('=>"general eval check",
 	'base64_decode'=>"general base64_decode check"
 ];
