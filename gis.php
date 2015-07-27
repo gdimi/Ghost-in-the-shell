@@ -3,7 +3,7 @@
  * Ghost In the Shell
  * a php file security scanner
  * by George Dimitrakopoulos 2015
- * version 0.662alpha
+ * version 0.663alpha
 @copyright
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -73,6 +73,7 @@ $patternData = [
         '7P15f9s4kjgO'=>"gzbase64.inject.unclassed",
         '@eval(gzinflate(base64_decode($error)));'=>"gzbase64.inject.unclassed",
         'GIF89a<?php eval(gzinflate(str_rot13(base64_decode('=>"fake gif",
+        ");}dnnViewState();"=>"javascript SEO spam",
 	'eval('=>"general eval check",
 	'base64_decode'=>"general base64_decode check"
 ];
