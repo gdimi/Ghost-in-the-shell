@@ -74,6 +74,8 @@ $patternData = [
         '@eval(gzinflate(base64_decode($error)));'=>"gzbase64.inject.unclassed",
         'GIF89a<?php eval(gzinflate(str_rot13(base64_decode('=>"fake gif",
         ");}dnnViewState();"=>"javascript SEO spam",
+        "onfr64_qrpbqr"=>"php.backdoor.str_rot13.001",
+        'eval($ccvOyK8PR'=>"credit card fishing?",
 	'eval('=>"general eval check",
 	'base64_decode'=>"general base64_decode check"
 ];
@@ -92,6 +94,7 @@ $fileData = [
 	'c99.*' => "shell 99 file",
 	'r57.*' => "r57 backdoor file",
 	'.error0.php' => "mass spam mailer",
+	'php_http_server_generic.php'=>"obscure file, maybe what it says!"
 	'.*' => "dot file"
 ];
 
