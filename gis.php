@@ -95,7 +95,7 @@ $fileData = [
 	'c99.*' => "shell 99 file",
 	'r57.*' => "r57 backdoor file",
 	'.error0.php' => "mass spam mailer",
-	'php_http_server_generic.php'=>"obscure file, maybe what it says!"
+	'php_http_server_generic.php'=>"obscure file, maybe what it says!",
 	'.*' => "dot file"
 ];
 
