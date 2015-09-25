@@ -3,7 +3,8 @@
  * Ghost In the Shell
  * a php file security scanner
  * by George Dimitrakopoulos 2015
- * version 0.667alpha
+ * version 0.671alpha
+ * last modified 2015-9-25 14:00 UTC+2
 @copyright
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -39,7 +40,7 @@ a = scan all files not only php
 i = scan for fake images (php scripts with image filename/extension)
 **********************************/
 
-$version = "0.66";
+$version = "0.67";
 
 //data to test
 $stringData = 'r0nin|m0rtix|upl0ad|r57shell|c99shell|shellbot|phpshell|void\.ru|phpremoteview|directmail|bash_history|multiviews|cwings|vandal|bitchx|eggdrop|guardservices|psybnc|dalnet|undernet|vulnscan|spymeta|raslan58|Webshell|str_rot13|FilesMan|FilesTools|Web Shell|ifrm|bckdrprm|hackmeplz|wrgggthhd|WSOsetcookie|Hmei7|Inbox Mass Mailer|HackTeam|Hackeado|INVISION POWER BOARD|\$GLOBALS\[\'(.*)\'\];global\$(.*);\$';
