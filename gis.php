@@ -205,8 +205,13 @@ class Scanner {
 		//now scan!
 		 foreach ($this->f2sarr as $line_num => $line ) {
 			if (preg_match('/('.$stringData.')/',$line,$matches)) {
-				$this->found[] = "line - $line_num: ".$matches[0].$this->eol;
-				$this->logit("line - $line_num: ".$matches[0]);
+				if (strlen($matches[0]) > 48) {
+					$pchunk = substr($matches[0],0,48);
+				} else {
+					$pchunk = $matches[0];
+				}
+				$this->found[] = "line - $line_num: ".$pchunk.$this->eol;
+				$this->logit("line - $line_num: ".$pchunk);
 			}
 
 			foreach ($patternData as $pattern => $info) {
