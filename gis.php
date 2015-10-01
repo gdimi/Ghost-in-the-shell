@@ -3,8 +3,8 @@
  * Ghost In the Shell
  * a php file security scanner
  * by George Dimitrakopoulos 2015
- * version 0.671alpha
- * last modified 2015-9-25 14:00 UTC+2
+ * version 0.675alpha
+ * last modified 2015-10-01 07:28 UTC+2
 @copyright
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -78,6 +78,8 @@ $patternData = [
         "onfr64_qrpbqr"=>"php.backdoor.str_rot13.001",
         'eval($ccvOyK8PR'=>"credit card fishing?",
         '$k="ass"."ert"'=>'allows a remote attacker to run any code on your site',
+        '*///istart'=> 'pseudo darkleech variant.See https://blog.sucuri.net/2015/03/pseudo-darkleech-server-root-infection.html',
+        'passssword'=> 'pseudo darkleech variant',
 	'eval('=>"general eval check",
 	'base64_decode'=>"general base64_decode check"
 ];
@@ -97,6 +99,8 @@ $fileData = [
 	'r57.*' => "r57 backdoor file",
 	'.error0.php' => "mass spam mailer",
 	'php_http_server_generic.php'=>"obscure file, maybe what it says!",
+	'general-klausel.php'=>"darkleech variant",
+	'generalklausel.php'=>"darkleech variant",
 	'.*' => "dot file"
 ];
 
