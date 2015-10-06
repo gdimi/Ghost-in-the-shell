@@ -635,7 +635,7 @@ if ((is_object($scanner) && $scanner->getOutput() == 'html') || $htmlMode) { ?>
 				} ?>
 			</div>
 		</section>
-		<footer><pre>By George Dimitrakopoulos 2015</pre></footer>
+		<footer><pre>v<?php echo $version; ?> By George Dimitrakopoulos 2015</pre></footer>
 	</body>
 </html>
 <?php 
