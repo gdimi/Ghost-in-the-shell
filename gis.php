@@ -274,7 +274,7 @@ class Scanner {
 		 *if multiple options of the same kind only the last is actually saved*/
 		$optlen = strlen($Options);
 		if ($optlen) {
-			for($b=0;$b<=$optlen;$b++) {
+			for($b=0;$b<$optlen;$b++) {
 				switch($Options[$b]) {
 					case "f": // = full log
 						$this->lparms = 'full';
