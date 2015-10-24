@@ -323,7 +323,7 @@ class Scanner {
 	  * sets a new file to scan
 	  */ 
 		$this->f2s = $f2s;
-		$this->f2sarr = file($this->f2s, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+		$this->f2sarr = file($this->f2s);
 	}
 
 	protected function logger($msg) {
