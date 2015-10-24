@@ -45,6 +45,10 @@ $version = "0.67";
 //data to test
 $stringData = 'r0nin|m0rtix|upl0ad|r57shell|c99shell|shellbot|phpshell|void\.ru|phpremoteview|directmail|bash_history|multiviews|cwings|vandal|bitchx|eggdrop|guardservices|psybnc|dalnet|undernet|vulnscan|spymeta|raslan58|Webshell|str_rot13|FilesMan|FilesTools|Web Shell|ifrm|bckdrprm|hackmeplz|wrgggthhd|WSOsetcookie|Hmei7|Inbox Mass Mailer|HackTeam|Hackeado|INVISION POWER BOARD|\$GLOBALS\[\'(.*)\'\];global\$(.*);\$';
 
+$patternPreg = array(
+	'/\$GLOBALS\[(.*)\]\((.*)\)/i' => 'call to $GLOBALS[something](something)'
+);
+
 $patternData = array(
 	'${"\x47\x4cO\x42A\x4c\x53"}' => "hex'd php code, 2 main classes: Config_File and pssarseCSV. Possible database/login credentials stealing, saves it to data.csv or if remotely called sets headers to application/csv. Tries to include several files ",
 	'$sF="PCT4BA6ODSE_"'=> "this is the nb08 remote execution script.Known to infest old wordpress,joomla even drupal installations",
@@ -196,6 +200,9 @@ class Scanner {
 	}
 
 	private function polymorphReplace($line){
+		//replace spaces
+		$line=str_replace(' ','',$line);
+
 		//replace ".chr(xxx)." to the character itself
 		$line = preg_replace_callback(array(
 			'/"\.chr\(([0-9]+)\)\."/i', '/\'\.chr\(([0-9]+)\)\.\'/i'
@@ -207,7 +214,10 @@ class Scanner {
 		return $line;
 	}
 
-	public function scanFile($parms,$patternData,$stringData) {
+	public function scanFile($parms) {
+		global $stringData;
+		global $patternData;
+		global $patternPreg;
 	 /*scan a file
 	 * $parms :can be "all","code" meaning everything and only suspicious code inside file
 	 * $patternData: array of data to scan for
@@ -247,6 +257,18 @@ class Scanner {
 					$this->logit("line - $line_num (char $pos): ".$chunk.' | '.$info);
 				}
 			}
+
+			 foreach ($patternPreg as $regexp => $message) {
+				 if (preg_match($regexp, $line, $matches)) {
+					 if (strlen($matches[0]) > 48) {
+						 $pchunk = substr($matches[0],0,48);
+					 } else {
+						 $pchunk = $matches[0];
+					 }
+					 $this->found[] = "line - $line_num: ".$pchunk.' | '.$message.$this->eol;
+					 $this->logit("line - $line_num: ".$pchunk.' | '.$message);
+				 }
+			 }
 		 }
 	}
 
@@ -545,7 +567,7 @@ if (file_exists($o2s)) {
 						}
 						//$output .= 'File: '.$f2s.PHP_EOL;
 						$scanner->setNewf2s($f2s);
-						$scanner->scanFile("all",$patternData,$stringData);
+						$scanner->scanFile("all");
 						if (count($scanner->found)) {
 							foreach($scanner->found as $l) {
 								$found .= $l;
@@ -575,7 +597,7 @@ if (file_exists($o2s)) {
 		$size = $info->getSize();
 
 		$scanner = new Scanner($o2s,$eol,$htmlMode,$scannerOptions);
-		$scanner->scanFile("all",$patternData,$stringData);
+		$scanner->scanFile("all");
 		if (count($scanner->found)) {
 			foreach($scanner->found as $l) {
 				$found .= $l;
