@@ -138,7 +138,7 @@ class Scanner {
 		file_put_contents($this->logfile," "); //erase logfile if already exists
 		$this->lparms = 'full'; //default logging is full
 		if ($f2s) { //if there is a file to scan, load it
-			$this->f2sarr = file($f2s, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+			$this->f2sarr = file($f2s);
 		}
 		$this->eol = $eol; //End of line passed
 		if ($htmlMode) { $this->output = 'html'; } //output
@@ -187,6 +187,25 @@ class Scanner {
 	 }
 	}
 
+	private function polymorphReplaceChr($matches){
+		return chr($matches[1]);
+	}
+
+	private function polymorphReplaceChrHex($matches){
+		return chr(hexdec($matches[1]));
+	}
+
+	private function polymorphReplace($line){
+		//replace ".chr(xxx)." to the character itself
+		$line = preg_replace_callback(array(
+			'/"\.chr\(([0-9]+)\)\."/i', '/\'\.chr\(([0-9]+)\)\.\'/i'
+		), array($this,'polymorphReplaceChr'),$line);
+
+		//replace \xAC to the character itself
+		$line = preg_replace_callback("/\\\\x([0-9ABCDEFabcdef]{2})/i", array($this,'polymorphReplaceChrHex'),$line);
+
+		return $line;
+	}
 
 	public function scanFile($parms,$patternData,$stringData) {
 	 /*scan a file
@@ -200,7 +219,7 @@ class Scanner {
 
 		 //make sure that there is something to scan
 		 if (count($this->f2sarr) < 1 && $this->f2s != '') {
-			 $f2sarr = file($this->f2s, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+			 $f2sarr = file($this->f2s);
 			 if (is_array($f2sarr)) {
 				 $this->f2sarr = $f2sarr;
 			 } else {
@@ -209,6 +228,8 @@ class Scanner {
 		 }
 		//now scan!
 		 foreach ($this->f2sarr as $line_num => $line ) {
+			$line = $this->polymorphReplace($line);
+
 			if (preg_match('/('.$stringData.')/',$line,$matches)) {
 				if (strlen($matches[0]) > 48) {
 					$pchunk = substr($matches[0],0,48);
