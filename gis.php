@@ -3,7 +3,7 @@
  * Ghost In the Shell
  * a php file security scanner
  * by George Dimitrakopoulos 2015
- * version 0.675alpha
+ * version 0.687alpha
  * last modified 2015-10-01 07:28 UTC+2
 @copyright
 This program is free software; you can redistribute it and/or modify
@@ -38,9 +38,10 @@ j = json format log
 s = silent, no output
 a = scan all files not only php
 i = scan for fake images (php scripts with image filename/extension)
+o = no logfile creation
 **********************************/
 
-$version = "0.67";
+$version = "0.68";
 
 //data to test
 $stringData = 'r0nin|m0rtix|upl0ad|r57shell|c99shell|shellbot|phpshell|void\.ru|phpremoteview|directmail|bash_history|multiviews|cwings|vandal|bitchx|eggdrop|guardservices|psybnc|dalnet|undernet|vulnscan|spymeta|raslan58|Webshell|str_rot13|FilesMan|FilesTools|Web Shell|ifrm|bckdrprm|hackmeplz|wrgggthhd|WSOsetcookie|Hmei7|Inbox Mass Mailer|HackTeam|Hackeado|INVISION POWER BOARD|\$GLOBALS\[\'(.*)\'\];global\$(.*);\$';
@@ -130,19 +131,25 @@ class Scanner {
 	private $allFiles = false;
 	private $fakeImages = false;
 	private $forceHtml = false;
+	private $nologfile = false;
 	private $output = 'cli'; //cli,html,silent
 
 
 	function __construct($f2s,$eol,$htmlMode,$scannerOptions) {
-		$this->logfile = "gis-".date("Y-m-d_H:i:s").".log"; //default log filename
-		file_put_contents($this->logfile," "); //erase logfile if already exists
+		if ($htmlMode) { $this->output = 'html'; } //output
+		$this->scannerOptions($scannerOptions);
+		
+		if (!$this->nologfile) {
+			$this->logfile = "gis-" . date("Y-m-d_H:i:s") . ".log"; //default log filename
+			file_put_contents($this->logfile, " "); //erase logfile if already exists
+		}
+		
 		$this->lparms = 'full'; //default logging is full
 		if ($f2s) { //if there is a file to scan, load it
 			$this->f2sarr = file($f2s, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
 		}
 		$this->eol = $eol; //End of line passed
-		if ($htmlMode) { $this->output = 'html'; } //output
-		$this->scannerOptions($scannerOptions);
+
 	}
 
 
@@ -248,7 +255,7 @@ class Scanner {
 	 * }
 	 */
 
-		if ($msg != '') {
+		if (($msg != '') && (!$this->nologfile)) {
 			$logged = file_put_contents($this->logfile, $msg."\n", FILE_APPEND | LOCK_EX);
 			if ($logged == false) {
 				$this->showError("failed to save in ".$this->logfile." !");
@@ -294,6 +301,9 @@ class Scanner {
 					case "i": //= scan for fake images (php scripts with image filename/extension)
 						$this->fakeImages = true;
 						break;
+					case "o": //= no log file creation
+						$this->nologfile = true;
+						break;					
 					default:
 						continue;
 				}
@@ -407,6 +417,7 @@ function Usage($eol) {
 f = full log
 n = filename only log
 j = json format log
+o = no logfile
 s = silent, no output
 a = scan all files not only php
 i = scan for fake images (php scripts with image filename/extension)'.$eol;
