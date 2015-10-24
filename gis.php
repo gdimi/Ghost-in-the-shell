@@ -305,7 +305,7 @@ class Scanner {
 	 * }
 	 */
 
-		if (($msg != '') && (!!$this->nologfile)) {
+		if (($msg != '') && (!$this->nologfile)) {
 			$logged = file_put_contents($this->logfile, $msg."\n", FILE_APPEND | LOCK_EX);
 			if ($logged == false) {
 				$this->showError("failed to save in ".$this->logfile." !");
