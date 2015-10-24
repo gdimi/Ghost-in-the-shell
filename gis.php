@@ -39,6 +39,7 @@ s = silent, no output
 a = scan all files not only php
 i = scan for fake images (php scripts with image filename/extension)
 x = try to fix the code
+o = don't create local log file
 **********************************/
 
 $version = "0.67";
@@ -136,19 +137,23 @@ class Scanner {
 	private $fakeImages = false;
 	private $tryFixing = false;
 	private $forceHtml = false;
+	private $nologfile = false;
 	private $output = 'cli'; //cli,html,silent
 
 
 	function __construct($f2s,$eol,$htmlMode,$scannerOptions) {
-		$this->logfile = "gis-".date("Y-m-d_H:i:s").".log"; //default log filename
-		file_put_contents($this->logfile," "); //erase logfile if already exists
+		if ($htmlMode) { $this->output = 'html'; } //output
+		$this->scannerOptions($scannerOptions);
+
+		if (!$this->nologfile) {
+			$this->logfile = "gis-" . date("Y-m-d_H:i:s") . ".log"; //default log filename
+			file_put_contents($this->logfile, " "); //erase logfile if already exists
+		}
 		$this->lparms = 'full'; //default logging is full
 		if ($f2s) { //if there is a file to scan, load it
 			$this->f2sarr = file($f2s);
 		}
 		$this->eol = $eol; //End of line passed
-		if ($htmlMode) { $this->output = 'html'; } //output
-		$this->scannerOptions($scannerOptions);
 	}
 
 
@@ -300,7 +305,7 @@ class Scanner {
 	 * }
 	 */
 
-		if ($msg != '') {
+		if (($msg != '') && (!!$this->nologfile)) {
 			$logged = file_put_contents($this->logfile, $msg."\n", FILE_APPEND | LOCK_EX);
 			if ($logged == false) {
 				$this->showError("failed to save in ".$this->logfile." !");
@@ -348,6 +353,9 @@ class Scanner {
 						break;
 					case "x": //= try fixing the files
 						$this->tryFixing = true;
+						break;
+					case "o": //= no log file creation
+						$this->nologfile = true;
 						break;
 					default:
 						continue;
@@ -465,7 +473,8 @@ j = json format log
 s = silent, no output
 a = scan all files not only php
 i = scan for fake images (php scripts with image filename/extension)
-x = try to fix the code (highly experimental...)'.$eol;
+x = try to fix the code (highly experimental...)
+o = don\'t create local log file'.$eol;
 	exit(1);
 }
 
