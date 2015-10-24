@@ -152,7 +152,7 @@ class Scanner {
 		}
 		$this->lparms = 'full'; //default logging is full
 		if ($f2s) { //if there is a file to scan, load it
-			$this->f2sarr = file($f2s);
+			$this->f2sarr = file($f2s, FILE_IGNORE_NEW_LINES);
 		}
 		$this->eol = $eol; //End of line passed
 	}
@@ -323,7 +323,7 @@ class Scanner {
 	  * sets a new file to scan
 	  */ 
 		$this->f2s = $f2s;
-		$this->f2sarr = file($this->f2s);
+		$this->f2sarr = file($this->f2s, FILE_IGNORE_NEW_LINES);
 	}
 
 	protected function logger($msg) {
