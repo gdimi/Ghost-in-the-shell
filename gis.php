@@ -48,6 +48,7 @@ $version = "0.67";
 $stringData = 'r0nin|m0rtix|upl0ad|r57shell|c99shell|shellbot|phpshell|void\.ru|phpremoteview|directmail|bash_history|multiviews|cwings|vandal|bitchx|eggdrop|guardservices|psybnc|dalnet|undernet|vulnscan|spymeta|raslan58|Webshell|str_rot13|FilesMan|FilesTools|Web Shell|ifrm|bckdrprm|hackmeplz|wrgggthhd|WSOsetcookie|Hmei7|Inbox Mass Mailer|HackTeam|Hackeado|INVISION POWER BOARD|\$GLOBALS\[\'(.*)\'\];global\$(.*);\$';
 
 $patternPreg = array(
+	'/\$GLOBALS\[(.*)\];global\$(.*)exit\(\)\;}/i' => 'some $GLOBALS virus',
 	'/\$GLOBALS\[(.*)\]\((.*)\)/i' => 'call to $GLOBALS[something](something)'
 );
 
@@ -281,6 +282,15 @@ class Scanner {
 					 }
 					 $this->found[] = "line - $line_num: ".$pchunk.' | '.$message.$this->eol;
 					 $this->logit("line - $line_num: ".$pchunk.' | '.$message);
+
+					 //fix for some $GLOBALS virus
+					 if (($message == 'some $GLOBALS virus') && ($this->tryFixing)){
+						 $contents = file_get_contents($this->f2s);
+						 $contents = preg_replace('/\$GLOBALS\[(.*)\];global\$(.*)exit\(\)\;}/i','',$contents);
+						 //remove empty <? php (space..) ? >
+						 $contents = preg_replace('/<\?php(\s+)\?>/s','',$contents);
+						 file_put_contents($this->f2s,$contents);
+					 }
 				 }
 			 }
 		 }
