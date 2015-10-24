@@ -146,7 +146,7 @@ class Scanner {
 		
 		$this->lparms = 'full'; //default logging is full
 		if ($f2s) { //if there is a file to scan, load it
-			$this->f2sarr = file($f2s, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+			$this->f2sarr = file($f2s);
 		}
 		$this->eol = $eol; //End of line passed
 
@@ -207,7 +207,7 @@ class Scanner {
 
 		 //make sure that there is something to scan
 		 if (count($this->f2sarr) < 1 && $this->f2s != '') {
-			 $f2sarr = file($this->f2s, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+			 $f2sarr = file($this->f2s);
 			 if (is_array($f2sarr)) {
 				 $this->f2sarr = $f2sarr;
 			 } else {
@@ -241,7 +241,7 @@ class Scanner {
 	  * sets a new file to scan
 	  */ 
 		$this->f2s = $f2s;
-		$this->f2sarr = file($this->f2s, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+		$this->f2sarr = file($this->f2s);
 	}
 
 	protected function logger($msg) {
