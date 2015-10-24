@@ -38,6 +38,7 @@ j = json format log
 s = silent, no output
 a = scan all files not only php
 i = scan for fake images (php scripts with image filename/extension)
+x = try to fix the code
 **********************************/
 
 $version = "0.67";
@@ -133,6 +134,7 @@ class Scanner {
 	private $lparms = ''; //logger parameters
 	private $allFiles = false;
 	private $fakeImages = false;
+	private $tryFixing = false;
 	private $forceHtml = false;
 	private $output = 'cli'; //cli,html,silent
 
@@ -255,6 +257,13 @@ class Scanner {
 					$chunk = substr($line,$pos,32);
 					$this->found[] = "line - $line_num (char $pos): ".$chunk.' | '.$info.$this->eol;
 					$this->logit("line - $line_num (char $pos): ".$chunk.' | '.$info);
+
+					//small fix for backdoor str_rot13
+					if (($info == 'php.backdoor.str_rot13.001') && ($this->tryFixing)){
+						$contents = file_get_contents($this->f2s);
+						$contents = preg_replace('/\n\/\/###\=\=###[\s\S]+?\/\/###\=\=###\n/s','',$contents);
+						file_put_contents($this->f2s,$contents);
+					}
 				}
 			}
 
@@ -336,6 +345,9 @@ class Scanner {
 						break;
 					case "i": //= scan for fake images (php scripts with image filename/extension)
 						$this->fakeImages = true;
+						break;
+					case "x": //= try fixing the files
+						$this->tryFixing = true;
 						break;
 					default:
 						continue;
@@ -452,7 +464,8 @@ n = filename only log
 j = json format log
 s = silent, no output
 a = scan all files not only php
-i = scan for fake images (php scripts with image filename/extension)'.$eol;
+i = scan for fake images (php scripts with image filename/extension)
+x = try to fix the code (highly experimental...)'.$eol;
 	exit(1);
 }
 
