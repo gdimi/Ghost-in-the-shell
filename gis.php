@@ -246,6 +246,7 @@ class Scanner {
 		 }
 		//now scan!
 		 foreach ($this->f2sarr as $line_num => $line ) {
+			$originalline = $line;
 			$line = $this->polymorphReplace($line);
 
 			if (preg_match('/('.$stringData.')/',$line,$matches)) {
@@ -290,6 +291,27 @@ class Scanner {
 						 //remove empty <? php (space..) ? >
 						 $contents = preg_replace('/<\?php(\s+)\?>/s','',$contents);
 						 file_put_contents($this->f2s,$contents);
+					 }
+				 }
+			 }
+
+			 //special pattern (needs "the spaces" before the code)
+			 if (preg_match('/<\?php \s{20,80}(.*)eval(\s*)\((.*)\?>/i',$originalline,$matches)){
+				 if (strlen($matches[0]) > 48) {
+					 $pchunk = substr($matches[0],0,48);
+				 } else {
+					 $pchunk = $matches[0];
+				 }
+				 $this->found[] = "line - $line_num: extra eval prefix".$this->eol;
+				 $this->logit("line - $line_num: extra eval prefix");
+
+				 //can we fix it?
+				 if ($this->tryFixing){
+					 $contents = file_get_contents($this->f2s);
+					 $contents = preg_replace('/<\?php \s{20,80}(.*)eval(\s*)\((.*)\?>/i','',$contents);
+					 file_put_contents($this->f2s,$contents);
+					 if (strlen($contents)==0){
+						 unlink($this->f2s);
 					 }
 				 }
 			 }
