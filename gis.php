@@ -88,7 +88,8 @@ $patternData = array(
         '*///istart'=> 'pseudo darkleech variant.See https://blog.sucuri.net/2015/03/pseudo-darkleech-server-root-infection.html',
         'passssword'=> 'pseudo darkleech variant',
 	'eval('=>"general eval check",
-	'base64_decode'=>"general base64_decode check"
+	'base64_decode'=>"general base64_decode check",
+	'/rjbvcxwre/456vcxgrt.php' => 'Remote downloader malware'
 );
 
 $fileData = array(
