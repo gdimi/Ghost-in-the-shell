@@ -195,11 +195,13 @@ class Scanner {
 	}
 
 
-	public function scanFile($parms,$patternData,$stringData) {
+	public function scanFile($parms) {
 	 /*scan a file
 	 * $parms :can be "all","code" meaning everything and only suspicious code inside file
 	 * $patternData: array of data to scan for
 	 */
+	 global $patternData; 
+	 global $stringData;
 
 		 $f2sarr = array(); 
 		 $results = array();
@@ -535,7 +537,7 @@ if (file_exists($o2s)) {
 						}
 						//$output .= 'File: '.$f2s.PHP_EOL;
 						$scanner->setNewf2s($f2s);
-						$scanner->scanFile("all",$patternData,$stringData);
+						$scanner->scanFile("all");
 						if (count($scanner->found)) {
 							foreach($scanner->found as $l) {
 								$found .= $l;
@@ -565,7 +567,7 @@ if (file_exists($o2s)) {
 		$size = $info->getSize();
 
 		$scanner = new Scanner($o2s,$eol,$htmlMode,$scannerOptions);
-		$scanner->scanFile("all",$patternData,$stringData);
+		$scanner->scanFile("all");
 		if (count($scanner->found)) {
 			foreach($scanner->found as $l) {
 				$found .= $l;
