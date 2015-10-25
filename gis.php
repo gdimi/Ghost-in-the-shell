@@ -50,7 +50,7 @@ $stringData = 'r0nin|m0rtix|upl0ad|r57shell|c99shell|shellbot|phpshell|void\.ru|
 $patternPreg = array(
 	'/\$GLOBALS\[(.*)\];global\$(.*)exit\(\)\;}/i' => 'some $GLOBALS virus',
 	'/\$GLOBALS\[(.*)\]\((.*)\)/i' => 'call to $GLOBALS[something](something)',
-	'sprintf\(\$(.*)\("/i'=>'$O00OO0 virus'
+	'/sprintf\(\$([0-9a-zA-Z]*)\(/i'=>'$O00OO0 virus'
 );
 
 $patternData = array(
