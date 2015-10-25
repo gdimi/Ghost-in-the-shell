@@ -3,8 +3,8 @@
  * Ghost In the Shell
  * a php file security scanner
  * by George Dimitrakopoulos 2015
- * version 0.687alpha
- * last modified 2015-10-01 07:28 UTC+2
+ * version 0.695alpha
+ * last modified 2015-10-25 10:34 UTC+2
 @copyright
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -30,7 +30,7 @@ Requires php 5.4+
 php gis.php file_to_scan
 php gis.php dir_to_scan
 php gis.php (inside a dir to scan with an "." as argument scans everything inside that dir including subdirs)
-php gis.php -o<options> file_or_dir_to_scan
+php gis.php -<options> file_or_dir_to_scan
 options:
 f = full log
 n = filename only log
@@ -41,7 +41,7 @@ i = scan for fake images (php scripts with image filename/extension)
 o = no logfile creation
 **********************************/
 
-$version = "0.68";
+$version = "0.69";
 
 //data to test
 $stringData = 'r0nin|m0rtix|upl0ad|r57shell|c99shell|shellbot|phpshell|void\.ru|phpremoteview|directmail|bash_history|multiviews|cwings|vandal|bitchx|eggdrop|guardservices|psybnc|dalnet|undernet|vulnscan|spymeta|raslan58|Webshell|str_rot13|FilesMan|FilesTools|Web Shell|ifrm|bckdrprm|hackmeplz|wrgggthhd|WSOsetcookie|Hmei7|Inbox Mass Mailer|HackTeam|Hackeado|INVISION POWER BOARD|\$GLOBALS\[\'(.*)\'\];global\$(.*);\$';
@@ -132,6 +132,7 @@ class Scanner {
 	private $fakeImages = false;
 	private $forceHtml = false;
 	private $nologfile = false;
+	private $silent = false;
 	private $output = 'cli'; //cli,html,silent
 
 
@@ -295,7 +296,7 @@ class Scanner {
 						$this->lparms = 'json';
 						break;
 					case "s": //= silent
-						$this->output = 'silent';
+						$this->silent = 'silent';
 						break;
 					case "a": //= scan all files not only php
 						$this->allFiles = true;
@@ -305,7 +306,7 @@ class Scanner {
 						break;
 					case "o": //= no log file creation
 						$this->nologfile = true;
-						break;					
+						break;
 					default:
 						continue;
 				}
@@ -322,6 +323,8 @@ class Scanner {
 		/* returns current output */
 		if ($this->forceHtml) {
 			return 'html';
+		} elseif ($this->silent) {
+			return 'silent';
 		} else {
 			return $this->output;
 		}
@@ -413,7 +416,7 @@ function boxMsgCenter($msg,$char,$style_color) {
 }
 
 function Usage($eol) {
-	echo ' Cli Usage: php gis.php -o <options> filename (or directory)'.$eol;
+	echo ' Cli Usage: php gis.php -<options> filename (or directory)'.$eol;
 	echo ' Web Usage: php gis.php?o=options&f=filename (or directory)'.$eol;
 	echo ' options are'.$eol.'
 f = full log
@@ -444,11 +447,12 @@ if (PHP_SAPI === 'cli') {
 	//echo $numOfargz.PHP_EOL;
 	$arga = $_SERVER['argv'];
 	//print_r($arga);
+	//die();
 	if (isset($arga[1])) {
-		if ($arga[1] == '-o') {
-			if ($numOfargz > 3) {
-				$scannerOptions = $arga[2];
-				$o2s = $arga[3];
+		if ($arga[1][0] =='-') {
+			if ($numOfargz > 2) {
+				$scannerOptions = $arga[1];
+				$o2s = $arga[2];
 			} else {
 				usage(PHP_EOL);
 			}
@@ -507,7 +511,7 @@ if ($numOfargz < 2 || $scannerOptions == '--help' || $o2s == '--help') {
 
 //get the object's info
 if (file_exists($o2s)) {
-	if (!$htmlMode) { // FIXME when output option is silent???
+	if (!$htmlMode && !strpos($scannerOptions,'s')) { // FIXME maybe better check for silent?
 		fwrite(STDOUT,PHP_EOL."$blue ".'* Ghost In the Shell php security file scanner*'." $RST".PHP_EOL.PHP_EOL);
 		fwrite(STDOUT,"please wait while scanning...".PHP_EOL);
 	}
@@ -652,7 +656,8 @@ if ((is_object($scanner) && $scanner->getOutput() == 'html') || $htmlMode) { ?>
 	</body>
 </html>
 <?php 
-} else { //FIXME if output is silent???
+} else {
+  if ($scanner->getOutput() != 'silent') {
 	echo PHP_EOL;
 	drawLine($line_len,"=");
 	echo PHP_EOL.boxMsgCenter("$o2s info","|",$bS).PHP_EOL;
@@ -685,5 +690,6 @@ if ((is_object($scanner) && $scanner->getOutput() == 'html') || $htmlMode) { ?>
 	}
 	echo PHP_EOL.PHP_EOL;
 	echo "v$version by George Dimitrakopoulos 2015".PHP_EOL;
+  }
 }
 ?>
