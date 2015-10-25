@@ -272,6 +272,10 @@ class Scanner {
 						$contents = preg_replace('/\n\/\/###\=\=###[\s\S]+?\/\/###\=\=###\n/s','',$contents);
 						file_put_contents($this->f2s,$contents);
 					}
+
+					if (($info == 'Remote downloader malware') && ($this->tryFixing)){
+						unlink($this->f2s);
+					}
 				}
 			}
 
