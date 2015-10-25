@@ -138,14 +138,16 @@ class Scanner {
 
 	function __construct($f2s,$eol,$htmlMode,$scannerOptions) {
 		if ($htmlMode) { $this->output = 'html'; } //output
+
+		$this->lparms = 'full'; //default logging is full
+
 		$this->scannerOptions($scannerOptions);
-		
+
 		if (!$this->nologfile) {
 			$this->logfile = "gis-" . date("Y-m-d_H:i:s") . ".log"; //default log filename
 			file_put_contents($this->logfile, " "); //erase logfile if already exists
 		}
-		
-		$this->lparms = 'full'; //default logging is full
+
 		if ($f2s) { //if there is a file to scan, load it
 			$this->f2sarr = file($f2s);
 		}
@@ -251,11 +253,6 @@ class Scanner {
 	/*logger
 	 * @note: the logger function doesnt store colors
 	 * $msg     :the line to log
-	 * $parms   :"full","fn","json" => 
-	 * { full: log includes filename, line, code segment, type
-	 * fn: filename only
-	 * json: full but in json format 
-	 * }
 	 */
 
 		if (($msg != '') && (!$this->nologfile)) {
@@ -267,7 +264,13 @@ class Scanner {
 	}
 
 	public function logit($msg) {
-	 /*logs something into logfile*/
+	 /*logs something into logfile
+	 * lparms   :"full","fn","json" => 
+	 * { full: log includes filename, line, code segment, type
+	 * fn: filename only
+	 * json: full but in json format 
+	 * }
+	  * */
 		if ($this->lparms == 'full') {
 			$tolog = $this->f2s.": ".$msg;
 		} else if ($this->lparms == 'fn') {
