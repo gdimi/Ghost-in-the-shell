@@ -90,6 +90,7 @@ $patternData = array(
         'passssword'=> 'pseudo darkleech variant',
 	'eval('=>"general eval check",
 	'base64_decode'=>"general base64_decode check",
+	'sprintf($'=>"general sprintf with var as pattern",
 	'/rjbvcxwre/456vcxgrt.php' => 'Remote downloader malware'
 );
 
