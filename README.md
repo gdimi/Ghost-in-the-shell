@@ -12,13 +12,14 @@ Requires php version 5.4+
 php gis.php file_to_scan  
 php gis.php dir_to_scan  
 php gis.php (inside a dir to scan with an "." as argument scans everything inside that dir including subdirs)  
-php gis.php -o<options> file_or_dir_to_scan  
+php gis.php -<options> file_or_dir_to_scan  
 
 ### options:
 
 f = full log  
 n = filename only log  
 j = json format log  
+o = no logfile creation
 s = silent, no output  
 a = scan all files not only php  
 i = scan for fake images (php scripts with image filename/extension)  
