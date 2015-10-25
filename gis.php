@@ -66,6 +66,7 @@ $patternData = array(
 	'preg_match("/bot/", $_SERVER[HTTP_USER_AGENT])' => "PHP:R57:01, backdoor that allows attackers to access, modify and reinfect your site. It is often hidden in the filesystem and hard to find without access to the server or logs. ",
 	'countimg.gif?id=4da620681febfa679b00b25f&p=1' => "MW:BACKDOOR:23, Malicious tracking code added to the page to notify attackers that a backdoor is present on that page.",
 	'preg_replace("/.*/e"'=>"possibly a Darkleech iFrame",
+	'preg_replace(\'/(.*)/e\''=>"preg_replace execute (pre 5.4 php)",
 	'preg_replace($f,strtr($rsa, $pka, $pkb)'=>"malicious redirect",
 	'rebots.php' => " A malware javascript (maljs) include call was identified in the site. It is used to load malware from the 'rebots.php' file and attempt to infect anyone visiting the site.",
 	'wp-core.php'=> "pharma-spam doorway",
