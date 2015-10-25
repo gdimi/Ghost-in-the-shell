@@ -49,7 +49,8 @@ $stringData = 'r0nin|m0rtix|upl0ad|r57shell|c99shell|shellbot|phpshell|void\.ru|
 
 $patternPreg = array(
 	'/\$GLOBALS\[(.*)\];global\$(.*)exit\(\)\;}/i' => 'some $GLOBALS virus',
-	'/\$GLOBALS\[(.*)\]\((.*)\)/i' => 'call to $GLOBALS[something](something)'
+	'/\$GLOBALS\[(.*)\]\((.*)\)/i' => 'call to $GLOBALS[something](something)',
+	'sprintf\(\$(.*)\("/i'=>'$O00OO0 virus'
 );
 
 $patternData = array(
@@ -90,7 +91,6 @@ $patternData = array(
         'passssword'=> 'pseudo darkleech variant',
 	'eval('=>"general eval check",
 	'base64_decode'=>"general base64_decode check",
-	'sprintf($'=>"general sprintf with var as pattern",
 	'/rjbvcxwre/456vcxgrt.php' => 'Remote downloader malware'
 );
 
