@@ -81,6 +81,8 @@ $patternData = [
         '$k="ass"."ert"'=>'allows a remote attacker to run any code on your site',
         '*///istart'=> 'pseudo darkleech variant.See https://blog.sucuri.net/2015/03/pseudo-darkleech-server-root-infection.html',
         'passssword'=> 'pseudo darkleech variant',
+        '<textarea name="neirong"'=>'weird chinese page where attacker can change admin password..or something.Infections on old wp, asp sites, jsp etc etc',
+        '<?php @eval($_POST['=>'backdoor to run arbitrary code in the form backdooredfile.php?whateverisinpost=anycommandpossible',
 	'eval('=>"general eval check",
 	'base64_decode'=>"general base64_decode check"
 ];
