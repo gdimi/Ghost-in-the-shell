@@ -3,7 +3,7 @@
  * Ghost In the Shell
  * a php file security scanner
  * by George Dimitrakopoulos 2015
- * version 0.695alpha
+ * version 0.702alpha
  * last modified 2015-10-25 10:34 UTC+2
 @copyright
 This program is free software; you can redistribute it and/or modify
@@ -41,7 +41,7 @@ i = scan for fake images (php scripts with image filename/extension)
 o = no logfile creation
 **********************************/
 
-$version = "0.69";
+$version = "0.70";
 
 //data to test
 $stringData = 'r0nin|m0rtix|upl0ad|r57shell|c99shell|shellbot|phpshell|void\.ru|phpremoteview|directmail|bash_history|multiviews|cwings|vandal|bitchx|eggdrop|guardservices|psybnc|dalnet|undernet|vulnscan|spymeta|raslan58|Webshell|str_rot13|FilesMan|FilesTools|Web Shell|ifrm|bckdrprm|hackmeplz|wrgggthhd|WSOsetcookie|Hmei7|Inbox Mass Mailer|HackTeam|Hackeado|INVISION POWER BOARD|\$GLOBALS\[\'(.*)\'\];global\$(.*);\$';
@@ -83,6 +83,7 @@ $patternData = [
         'passssword'=> 'pseudo darkleech variant',
         '<textarea name="neirong"'=>'weird chinese page where attacker can change admin password..or something.Infections on old wp, asp sites, jsp etc etc',
         '<?php @eval($_POST['=>'backdoor to run arbitrary code in the form backdooredfile.php?whateverisinpost=anycommandpossible',
+	'array_map("ass\x65rt",(array)$_REQUEST['=>'web shell',        
 	'eval('=>"general eval check",
 	'base64_decode'=>"general base64_decode check"
 ];
