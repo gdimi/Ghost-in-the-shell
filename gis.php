@@ -83,7 +83,11 @@ $patternData = [
         'passssword'=> 'pseudo darkleech variant',
         '<textarea name="neirong"'=>'weird chinese page where attacker can change admin password..or something.Infections on old wp, asp sites, jsp etc etc',
         '<?php @eval($_POST['=>'backdoor to run arbitrary code in the form backdooredfile.php?whateverisinpost=anycommandpossible',
-	'array_map("ass\x65rt",(array)$_REQUEST['=>'web shell',        
+	'array_map("ass\x65rt",(array)$_REQUEST['=>'web shell',
+	'WSO_VERSION'=>'c99 madshell variant',
+	'base64_decode("R0lGODlhUAAMAIAAAP8AAP'=>'false positive from timthumb plugin.An encoded gif that says..no hotlinkers ',
+	'$rand_url=$not_android_urls['=>'someone tries to make money by echoing a set of hacked urls..even for android users browsing this',
+	'$dc=strrev("edoced_46esab")'=>'easy to guess: its a reversed base64_decode! nice try jackass...',
 	'eval('=>"general eval check",
 	'base64_decode'=>"general base64_decode check"
 ];
