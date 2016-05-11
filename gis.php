@@ -4,7 +4,7 @@
  * a php file security scanner
  * by George Dimitrakopoulos 2015
  * version 0.702alpha
- * last modified 2015-10-25 10:34 UTC+2
+ * last modified 2016-5-11 13:34 UTC+2
 @copyright
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -88,6 +88,7 @@ $patternData = [
 	'base64_decode("R0lGODlhUAAMAIAAAP8AAP'=>'false positive from timthumb plugin.An encoded gif that says..no hotlinkers ',
 	'$rand_url=$not_android_urls['=>'someone tries to make money by echoing a set of hacked urls..even for android users browsing this',
 	'$dc=strrev("edoced_46esab")'=>'easy to guess: its a reversed base64_decode! nice try jackass...',
+	'@eval($_POST["err"]);?>45000'=>'eval any php command posted.No clue as to what 45000 is...',
 	'eval('=>"general eval check",
 	'base64_decode'=>"general base64_decode check"
 ];
