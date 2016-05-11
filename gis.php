@@ -3,7 +3,7 @@
  * Ghost In the Shell
  * a php file security scanner
  * by George Dimitrakopoulos 2015
- * version 0.702alpha
+ * version 0.706alpha
  * last modified 2016-5-11 13:34 UTC+2
 @copyright
 This program is free software; you can redistribute it and/or modify
@@ -700,7 +700,7 @@ if ((is_object($scanner) && $scanner->getOutput() == 'html') || $htmlMode) { ?>
 		}
 	}
 	echo PHP_EOL.PHP_EOL;
-	echo "v$version by George Dimitrakopoulos 2015".PHP_EOL;
+	echo "v$version by George Dimitrakopoulos 2015-2016".PHP_EOL;
   }
 }
 ?>
