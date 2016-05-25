@@ -46,7 +46,7 @@ $version = "0.70";
 //data to test
 $stringData = 'r0nin|m0rtix|upl0ad|r57shell|c99shell|shellbot|phpshell|void\.ru|phpremoteview|directmail|bash_history|multiviews|cwings|vandal|bitchx|eggdrop|guardservices|psybnc|dalnet|undernet|vulnscan|spymeta|raslan58|Webshell|str_rot13|FilesMan|FilesTools|Web Shell|ifrm|bckdrprm|hackmeplz|wrgggthhd|WSOsetcookie|Hmei7|Inbox Mass Mailer|HackTeam|Hackeado|INVISION POWER BOARD|\$GLOBALS\[\'(.*)\'\];global\$(.*);\$';
 
-$patternData = [
+$patternData = array(
 	'${"\x47\x4cO\x42A\x4c\x53"}' => "hex'd php code, 2 main classes: Config_File and pssarseCSV. Possible database/login credentials stealing, saves it to data.csv or if remotely called sets headers to application/csv. Tries to include several files ",
 	'$sF="PCT4BA6ODSE_"'=> "this is the nb08 remote execution script.Known to infest old wordpress,joomla even drupal installations",
 	'$qV="stop_";$s20=strtoupper' => "just evals a preseted ".'$_post'." variable. Possible remote execution script or something",
@@ -91,9 +91,9 @@ $patternData = [
 	'@eval($_POST["err"]);?>45000'=>'eval any php command posted.No clue as to what 45000 is...',
 	'eval('=>"general eval check",
 	'base64_decode'=>"general base64_decode check"
-];
+);
 
-$fileData = [
+$fileData = array(
 	'.general25.php' => "originaly a mailpoet wp plugin exploit. Infests files with eval'd code and adds a user 1001001 in database",
 	'.system10.php' => "",
 	'.press.php' => "",
@@ -111,11 +111,11 @@ $fileData = [
 	'general-klausel.php'=>"darkleech variant",
 	'generalklausel.php'=>"darkleech variant",
 	'.*' => "dot file"
-];
+);
 
-$dirData = ['images'=> "scan for php files in image folder"];
+$dirData = array('images'=> "scan for php files in image folder");
 
-$dbData = [
+$dbData = array(
 	'1001001'=> "bogus user in database",
 	'wp_check_hash' => "pharma hack entries in options wp table",
 	'class_generic_support' => "pharma hack entries in options wp table",
@@ -124,7 +124,7 @@ $dbData = [
 	'fwp' => "pharma hack entries in options wp table",
 	'rss_%' => "pharma hack entries in options wp table",
     'edoced_46esab(lave' => "value in wp_options table"
-];
+);
 
 
 class Scanner {
