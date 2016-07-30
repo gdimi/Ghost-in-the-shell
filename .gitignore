@@ -1,2 +1,3 @@
-﻿testfiles/*
-.idea/*
+.idea/
+testfiles/
+*.log

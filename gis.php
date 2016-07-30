@@ -38,12 +38,20 @@ j = json format log
 s = silent, no output
 a = scan all files not only php
 i = scan for fake images (php scripts with image filename/extension)
+x = try to fix the code
+o = don't create local log file
 **********************************/
 
 $version = "0.67";
 
 //data to test
 $stringData = 'r0nin|m0rtix|upl0ad|r57shell|c99shell|shellbot|phpshell|void\.ru|phpremoteview|directmail|bash_history|multiviews|cwings|vandal|bitchx|eggdrop|guardservices|psybnc|dalnet|undernet|vulnscan|spymeta|raslan58|Webshell|str_rot13|FilesMan|FilesTools|Web Shell|ifrm|bckdrprm|hackmeplz|wrgggthhd|WSOsetcookie|Hmei7|Inbox Mass Mailer|HackTeam|Hackeado|INVISION POWER BOARD|\$GLOBALS\[\'(.*)\'\];global\$(.*);\$';
+
+$patternPreg = array(
+	'/\$GLOBALS\[(.*)\];global\$(.*)exit\(\)\;}/i' => 'some $GLOBALS virus',
+	'/\$GLOBALS\[(.*)\]\((.*)\)/i' => 'call to $GLOBALS[something](something)',
+	'/sprintf\(\$([0-9a-zA-Z]*)\(/i'=>'$O00OO0 virus'
+);
 
 $patternData = array(
 	'${"\x47\x4cO\x42A\x4c\x53"}' => "hex'd php code, 2 main classes: Config_File and pssarseCSV. Possible database/login credentials stealing, saves it to data.csv or if remotely called sets headers to application/csv. Tries to include several files ",
@@ -59,6 +67,7 @@ $patternData = array(
 	'preg_match("/bot/", $_SERVER[HTTP_USER_AGENT])' => "PHP:R57:01, backdoor that allows attackers to access, modify and reinfect your site. It is often hidden in the filesystem and hard to find without access to the server or logs. ",
 	'countimg.gif?id=4da620681febfa679b00b25f&p=1' => "MW:BACKDOOR:23, Malicious tracking code added to the page to notify attackers that a backdoor is present on that page.",
 	'preg_replace("/.*/e"'=>"possibly a Darkleech iFrame",
+	'preg_replace(\'/(.*)/e\''=>"preg_replace execute (pre 5.4 php)",
 	'preg_replace($f,strtr($rsa, $pka, $pkb)'=>"malicious redirect",
 	'rebots.php' => " A malware javascript (maljs) include call was identified in the site. It is used to load malware from the 'rebots.php' file and attempt to infect anyone visiting the site.",
 	'wp-core.php'=> "pharma-spam doorway",
@@ -81,7 +90,9 @@ $patternData = array(
         '*///istart'=> 'pseudo darkleech variant.See https://blog.sucuri.net/2015/03/pseudo-darkleech-server-root-infection.html',
         'passssword'=> 'pseudo darkleech variant',
 	'eval('=>"general eval check",
-	'base64_decode'=>"general base64_decode check"
+	'extract($_'=>"extract trick on some global object",
+	'base64_decode'=>"general base64_decode check",
+	'/rjbvcxwre/456vcxgrt.php' => 'Remote downloader malware'
 );
 
 $fileData = array(
@@ -129,20 +140,25 @@ class Scanner {
 	private $lparms = ''; //logger parameters
 	private $allFiles = false;
 	private $fakeImages = false;
+	private $tryFixing = false;
 	private $forceHtml = false;
+	private $nologfile = false;
 	private $output = 'cli'; //cli,html,silent
 
 
 	function __construct($f2s,$eol,$htmlMode,$scannerOptions) {
-		$this->logfile = "gis-".date("Y-m-d_H:i:s").".log"; //default log filename
-		file_put_contents($this->logfile," "); //erase logfile if already exists
-		$this->lparms = 'full'; //default logging is full
-		if ($f2s) { //if there is a file to scan, load it
-			$this->f2sarr = file($f2s, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-		}
-		$this->eol = $eol; //End of line passed
 		if ($htmlMode) { $this->output = 'html'; } //output
 		$this->scannerOptions($scannerOptions);
+
+		if (!$this->nologfile) {
+			$this->logfile = "gis-" . date("Y-m-d_H:i:s") . ".log"; //default log filename
+			file_put_contents($this->logfile, " "); //erase logfile if already exists
+		}
+		$this->lparms = 'full'; //default logging is full
+		if ($f2s) { //if there is a file to scan, load it
+			$this->f2sarr = file($f2s, FILE_IGNORE_NEW_LINES);
+		}
+		$this->eol = $eol; //End of line passed
 	}
 
 
@@ -187,8 +203,33 @@ class Scanner {
 	 }
 	}
 
+	private function polymorphReplaceChr($matches){
+		return chr($matches[1]);
+	}
 
-	public function scanFile($parms,$patternData,$stringData) {
+	private function polymorphReplaceChrHex($matches){
+		return chr(hexdec($matches[1]));
+	}
+
+	private function polymorphReplace($line){
+		//replace spaces
+		$line=str_replace(' ','',$line);
+
+		//replace ".chr(xxx)." to the character itself
+		$line = preg_replace_callback(array(
+			'/"\.chr\(([0-9]+)\)\."/i', '/\'\.chr\(([0-9]+)\)\.\'/i'
+		), array($this,'polymorphReplaceChr'),$line);
+
+		//replace \xAC to the character itself
+		$line = preg_replace_callback("/\\\\x([0-9ABCDEFabcdef]{2})/i", array($this,'polymorphReplaceChrHex'),$line);
+
+		return $line;
+	}
+
+	public function scanFile($parms) {
+		global $stringData;
+		global $patternData;
+		global $patternPreg;
 	 /*scan a file
 	 * $parms :can be "all","code" meaning everything and only suspicious code inside file
 	 * $patternData: array of data to scan for
@@ -200,7 +241,7 @@ class Scanner {
 
 		 //make sure that there is something to scan
 		 if (count($this->f2sarr) < 1 && $this->f2s != '') {
-			 $f2sarr = file($this->f2s, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+			 $f2sarr = file($this->f2s);
 			 if (is_array($f2sarr)) {
 				 $this->f2sarr = $f2sarr;
 			 } else {
@@ -209,6 +250,9 @@ class Scanner {
 		 }
 		//now scan!
 		 foreach ($this->f2sarr as $line_num => $line ) {
+			$originalline = $line;
+			$line = $this->polymorphReplace($line);
+
 			if (preg_match('/('.$stringData.')/',$line,$matches)) {
 				if (strlen($matches[0]) > 48) {
 					$pchunk = substr($matches[0],0,48);
@@ -224,8 +268,61 @@ class Scanner {
 					$chunk = substr($line,$pos,32);
 					$this->found[] = "line - $line_num (char $pos): ".$chunk.' | '.$info.$this->eol;
 					$this->logit("line - $line_num (char $pos): ".$chunk.' | '.$info);
+
+					//small fix for backdoor str_rot13
+					if (($info == 'php.backdoor.str_rot13.001') && ($this->tryFixing)){
+						$contents = file_get_contents($this->f2s);
+						$contents = preg_replace('/\n\/\/###\=\=###[\s\S]+?\/\/###\=\=###\n/s','',$contents);
+						file_put_contents($this->f2s,$contents);
+					}
+
+					if (($info == 'Remote downloader malware') && ($this->tryFixing)){
+						unlink($this->f2s);
+					}
 				}
 			}
+
+			 foreach ($patternPreg as $regexp => $message) {
+				 if (preg_match($regexp, $line, $matches)) {
+					 if (strlen($matches[0]) > 48) {
+						 $pchunk = substr($matches[0],0,48);
+					 } else {
+						 $pchunk = $matches[0];
+					 }
+					 $this->found[] = "line - $line_num: ".$pchunk.' | '.$message.$this->eol;
+					 $this->logit("line - $line_num: ".$pchunk.' | '.$message);
+
+					 //fix for some $GLOBALS virus
+					 if (($message == 'some $GLOBALS virus') && ($this->tryFixing)){
+						 $contents = file_get_contents($this->f2s);
+						 $contents = preg_replace('/\$GLOBALS\[(.*)\];global\$(.*)exit\(\)\;}/i','',$contents);
+						 //remove empty <? php (space..) ? >
+						 $contents = preg_replace('/<\?php(\s+)\?>/s','',$contents);
+						 file_put_contents($this->f2s,$contents);
+					 }
+				 }
+			 }
+
+			 //special pattern (needs "the spaces" before the code)
+			 if (preg_match('/<\?php \s{20,80}(.*)eval(\s*)\((.*)\?>/i',$originalline,$matches)){
+				 if (strlen($matches[0]) > 48) {
+					 $pchunk = substr($matches[0],0,48);
+				 } else {
+					 $pchunk = $matches[0];
+				 }
+				 $this->found[] = "line - $line_num: extra eval prefix".$this->eol;
+				 $this->logit("line - $line_num: extra eval prefix");
+
+				 //can we fix it?
+				 if ($this->tryFixing){
+					 $contents = file_get_contents($this->f2s);
+					 $contents = preg_replace('/<\?php \s{20,80}(.*)eval(\s*)\((.*)\?>/i','',$contents);
+					 file_put_contents($this->f2s,$contents);
+					 if (strlen($contents)==0){
+						 unlink($this->f2s);
+					 }
+				 }
+			 }
 		 }
 	}
 
@@ -234,7 +331,7 @@ class Scanner {
 	  * sets a new file to scan
 	  */ 
 		$this->f2s = $f2s;
-		$this->f2sarr = file($this->f2s, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+		$this->f2sarr = file($this->f2s, FILE_IGNORE_NEW_LINES);
 	}
 
 	protected function logger($msg) {
@@ -248,7 +345,7 @@ class Scanner {
 	 * }
 	 */
 
-		if ($msg != '') {
+		if (($msg != '') && (!$this->nologfile)) {
 			$logged = file_put_contents($this->logfile, $msg."\n", FILE_APPEND | LOCK_EX);
 			if ($logged == false) {
 				$this->showError("failed to save in ".$this->logfile." !");
@@ -293,6 +390,12 @@ class Scanner {
 						break;
 					case "i": //= scan for fake images (php scripts with image filename/extension)
 						$this->fakeImages = true;
+						break;
+					case "x": //= try fixing the files
+						$this->tryFixing = true;
+						break;
+					case "o": //= no log file creation
+						$this->nologfile = true;
 						break;
 					default:
 						continue;
@@ -409,7 +512,9 @@ n = filename only log
 j = json format log
 s = silent, no output
 a = scan all files not only php
-i = scan for fake images (php scripts with image filename/extension)'.$eol;
+i = scan for fake images (php scripts with image filename/extension)
+x = try to fix the code (highly experimental...)
+o = don\'t create local log file'.$eol;
 	exit(1);
 }
 
@@ -524,7 +629,7 @@ if (file_exists($o2s)) {
 						}
 						//$output .= 'File: '.$f2s.PHP_EOL;
 						$scanner->setNewf2s($f2s);
-						$scanner->scanFile("all",$patternData,$stringData);
+						$scanner->scanFile("all");
 						if (count($scanner->found)) {
 							foreach($scanner->found as $l) {
 								$found .= $l;
@@ -554,7 +659,7 @@ if (file_exists($o2s)) {
 		$size = $info->getSize();
 
 		$scanner = new Scanner($o2s,$eol,$htmlMode,$scannerOptions);
-		$scanner->scanFile("all",$patternData,$stringData);
+		$scanner->scanFile("all");
 		if (count($scanner->found)) {
 			foreach($scanner->found as $l) {
 				$found .= $l;
