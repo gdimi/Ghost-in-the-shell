@@ -27,7 +27,7 @@ class StepPreg implements ScanStep
                 if (preg_match($regexp, $line, $matches)) {
                     $ret[] = array(
                         'line' => $line_num,
-                        'message' => substr($line, strpos($line,$matches[0]), 20) . " | " . $message,
+                        'message' => substr($line, strpos($line, $matches[0]), 20) . " | " . $message,
                         'sure' => 80
                     );
 
@@ -41,24 +41,24 @@ class StepPreg implements ScanStep
                     }
                 }
             }
-        }
-        //extra eval
-        //special pattern (needs "the spaces" before the code)
-        if (preg_match('/<\?php \s{20,80}(.*)eval(\s*)\((.*)\?>/i', $line, $matches)) {
+            //extra eval
+            //special pattern (needs "the spaces" before the code)
+            if (preg_match('/<\?php \s{20,80}(.*)eval(\s*)\((.*)\?>/i', $line, $matches)) {
 
-            $ret[] = array(
-                'line' => $line_num,
-                'message' => substr($matches[0], 0, 48) . " | extra eval prefix",
-                'sure' => 80
-            );
+                $ret[] = array(
+                    'line' => $line_num,
+                    'message' => substr($matches[0], 0, 48) . " | extra eval prefix",
+                    'sure' => 80
+                );
 
-            //can we fix it?
-            if ($this->scanner->tryFixing) {
-                $contents = file_get_contents($filename);
-                $contents = preg_replace('/<\?php \s{20,80}(.*)eval(\s*)\((.*)\?>/i', '', $contents);
-                file_put_contents($filename, $contents);
-                if (strlen($contents) == 0) {
-                    unlink($filename);
+                //can we fix it?
+                if ($this->scanner->tryFixing) {
+                    $contents = file_get_contents($filename);
+                    $contents = preg_replace('/<\?php \s{20,80}(.*)eval(\s*)\((.*)\?>/i', '', $contents);
+                    file_put_contents($filename, $contents);
+                    if (strlen($contents) == 0) {
+                        unlink($filename);
+                    }
                 }
             }
         }
