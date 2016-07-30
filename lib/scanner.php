@@ -1,17 +1,66 @@
 <?php
+/**
+ * Markers ar points in the code that "can be" a sign of a malware or virus
+ * Format:
+ *   array(
+ *      'line' => line number (optional),
+ *      'char' => character position (optional),
+ *      'sure' => probability 0-100 scale how sure this is a virus (default should be 50),
+ *      'message' => 'some information about the found pattern'
+ *   )
+ */
+
+/**
+ * Interface ScanStep
+ *      constructor should get the Scanner object
+ */
+interface ScanStep
+{
+    /**
+     * For preparation (like finding common libraries)
+     * @param $filelist
+     */
+    public function parseFileList(&$filelist);
+
+    /**
+     * Scan file and return possible markers
+     *      this step can only create markers and increase probability
+     * @param $filename
+     * @param $content original unmodified content
+     * @param $polycontent deobfuscated content
+     * @return list of markers
+     */
+    public function scanFile(&$filename, &$content, &$polycontent);
+
+    /**
+     * Whitelist some of the markers found in the file
+     *      this step can only decrease probability
+     * @param $filename
+     * @param $content
+     * @param $markers
+     */
+    public function whitelistFile(&$filename, &$content, &$polycontent, &$markers);
+}
 
 class Scanner
 {
 
     public $f2s; //current file to scan
     protected $f2sarr = array(); //array filled with current file's contents
-    public $logfile; //the logfile
     public $files = array(); // holds all files found
-    private $allFiles = false;
+
+    //hit and miss for testmode
+    public $hit = 0;
+    public $miss = array();
+
     private $imgexts = array('.jpg', '.png', '.gif', '.jpeg');
     private $fakeImages = false;
-    private $tryFixing = false;
+    private $allFiles = false;
+    public $tryFixing = false;
     public $nologfile = true;
+    public $testmode = false;
+
+    private $steps = array();
 
 
     function __construct($scannerOptions)
@@ -34,11 +83,19 @@ class Scanner
                     case "l": //= log file creation
                         $this->nologfile = false;
                         break;
+                    case "t":
+                        $this->testmode = true;
+                        break;
                     default:
                         continue;
                 }
             }
         }
+    }
+
+    function addStep(&$step)
+    {
+        $this->steps[] = $step;
     }
 
     public function addFileToScan($file)
@@ -73,6 +130,13 @@ class Scanner
         }
     }
 
+    public function prepareSteps()
+    {
+        foreach ($this->steps as $s1) {
+            $s1->parseFileList($this->files);
+        }
+    }
+
     public function scanFile()
     {
         global $stringData;
@@ -83,77 +147,53 @@ class Scanner
         $results = array();
         $chunk = ''; //chunk of what we found in line
 
-        //now scan!
-        foreach ($this->f2sarr as $line_num => $line) {
-            $originalline = $line;
-            $line = $this->polymorphReplace($line);
+        $markers = array();
 
-            if (preg_match('/(' . $stringData . ')/', $line, $matches)) {
-                if (strlen($matches[0]) > 48) {
-                    $pchunk = substr($matches[0], 0, 48);
-                } else {
-                    $pchunk = $matches[0];
+        //deobfuscate it
+        $deobf = array();
+        foreach ($this->f2sarr as $line) {
+            $deobf[] = $this->polymorphReplace($line);
+        }
+
+        //scan step
+        foreach ($this->steps as $s1) {
+            $markers = array_merge($markers, $s1->scanFile($this->f2s, $this->f2sarr, $deobf));
+        }
+
+        //whitelist step
+        foreach ($this->steps as $s1) {
+            $s1->whitelistFile($this->f2s, $this->f2sarr, $deobf, $markers);
+        }
+
+        $hit_done = false;
+        foreach ($markers as $m1) {
+            if ((isset($m1['sure'])) && ($m1['sure'] > 0)) {
+                $logline = '';
+                if (isset($m1['line'])) {
+                    $logline .= $m1['line'];
                 }
-                $this->logit("$line_num: " . $pchunk);
-            }
-
-            foreach ($patternData as $pattern => $info) {
-                if ($pos = strpos($line, $pattern)) { //$pos = character position in line
-                    $chunk = substr($line, $pos, 32);
-                    $this->logit("$line_num ($pos): " . $chunk . ' | ' . $info);
-
-                    //small fix for backdoor str_rot13
-                    if (($info == 'php.backdoor.str_rot13.001') && ($this->tryFixing)) {
-                        $contents = file_get_contents($this->f2s);
-                        $contents = preg_replace('/\n\/\/###\=\=###[\s\S]+?\/\/###\=\=###\n/s', '', $contents);
-                        file_put_contents($this->f2s, $contents);
+                if (isset($m1['char'])) {
+                    if (strlen($logline) > 0) {
+                        $logline .= ' ';
                     }
-
-                    if (($info == 'Remote downloader malware') && ($this->tryFixing)) {
-                        unlink($this->f2s);
-                    }
+                    $logline .= $m1['char'];
                 }
-            }
-
-            foreach ($patternPreg as $regexp => $message) {
-                if (preg_match($regexp, $line, $matches)) {
-                    if (strlen($matches[0]) > 48) {
-                        $pchunk = substr($matches[0], 0, 48);
-                    } else {
-                        $pchunk = $matches[0];
+                if (isset($m1['message'])) {
+                    if (strlen($logline) > 0) {
+                        $logline .= ': ';
                     }
-                    $this->logit("$line_num: " . $pchunk . ' | ' . $message);
-
-                    //fix for some $GLOBALS virus
-                    if (($message == 'some $GLOBALS virus') && ($this->tryFixing)) {
-                        $contents = file_get_contents($this->f2s);
-                        $contents = preg_replace('/\$GLOBALS\[(.*)\];global\$(.*)exit\(\)\;}/i', '', $contents);
-                        //remove empty <? php (space..) ? >
-                        $contents = preg_replace('/<\?php(\s+)\?>/s', '', $contents);
-                        file_put_contents($this->f2s, $contents);
-                    }
+                    $logline .= $m1['message'];
+                }
+                $this->logit($logline);
+                if ($hit_done == false) {
+                    $this->hit++;
+                    $hit_done = true;
                 }
             }
+        }
 
-            //special pattern (needs "the spaces" before the code)
-            if (preg_match('/<\?php \s{20,80}(.*)eval(\s*)\((.*)\?>/i', $originalline, $matches)) {
-                if (strlen($matches[0]) > 48) {
-                    $pchunk = substr($matches[0], 0, 48);
-                } else {
-                    $pchunk = $matches[0];
-                }
-                $this->logit("$line_num: extra eval prefix");
-
-                //can we fix it?
-                if ($this->tryFixing) {
-                    $contents = file_get_contents($this->f2s);
-                    $contents = preg_replace('/<\?php \s{20,80}(.*)eval(\s*)\((.*)\?>/i', '', $contents);
-                    file_put_contents($this->f2s, $contents);
-                    if (strlen($contents) == 0) {
-                        unlink($this->f2s);
-                    }
-                }
-            }
+        if ($hit_done == false) {
+            $this->miss[] = $this->f2s;
         }
     }
 

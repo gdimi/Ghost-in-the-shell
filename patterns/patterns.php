@@ -1,13 +1,4 @@
 <?php
-//data to test
-$stringData = 'r0nin|m0rtix|upl0ad|r57shell|c99shell|shellbot|phpshell|void\.ru|phpremoteview|directmail|bash_history|multiviews|cwings|bitchx|eggdrop|guardservices|psybnc|dalnet|undernet|vulnscan|spymeta|raslan58|Webshell|str_rot13|FilesMan|FilesTools|Web Shell|ifrm|bckdrprm|hackmeplz|wrgggthhd|WSOsetcookie|Hmei7|Inbox Mass Mailer|HackTeam|Hackeado|INVISION POWER BOARD|\$GLOBALS\[\'(.*)\'\];global\$(.*);\$';
-
-$patternPreg = array(
-    '/\$GLOBALS\[(.*)\];global\$(.*)exit\(\)\;}/i' => 'some $GLOBALS virus',
-    '/\$GLOBALS\[(.*)\]\((.*)\)/i' => 'call to $GLOBALS[something](something)',
-    '/sprintf\(\$([0-9a-zA-Z]*)\(/i'=>'$O00OO0 virus'
-);
-
 $patternData = array(
     '${"\x47\x4cO\x42A\x4c\x53"}' => "hex'd php code, 2 main classes: Config_File and pssarseCSV. Possible database/login credentials stealing, saves it to data.csv or if remotely called sets headers to application/csv. Tries to include several files ",
     '$sF="PCT4BA6ODSE_"'=> "this is the nb08 remote execution script.Known to infest old wordpress,joomla even drupal installations",
@@ -48,38 +39,5 @@ $patternData = array(
     'extract($_'=>"extract trick on some global object",
     'base64_decode'=>"general base64_decode check",
     '/rjbvcxwre/456vcxgrt.php' => 'Remote downloader malware'
-);
-
-$fileData = array(
-    '.general25.php' => "originaly a mailpoet wp plugin exploit. Infests files with eval'd code and adds a user 1001001 in database",
-    '.system10.php' => "",
-    '.press.php' => "",
-    '.system.php' => "",
-    '*.old.php' => "",
-    '*.cache.php' => "",
-    '*.bak.php' => "",
-    '*.DB*' => "",
-    'xroot.txt' => "",
-    'xx.txt' => "part of 0O0O hacks",
-    'c99.*' => "shell 99 file",
-    'r57.*' => "r57 backdoor file",
-    '.error0.php' => "mass spam mailer",
-    'php_http_server_generic.php'=>"obscure file, maybe what it says!",
-    'general-klausel.php'=>"darkleech variant",
-    'generalklausel.php'=>"darkleech variant",
-    '.*' => "dot file"
-);
-
-$dirData = array('images'=> "scan for php files in image folder");
-
-$dbData = array(
-    '1001001'=> "bogus user in database",
-    'wp_check_hash' => "pharma hack entries in options wp table",
-    'class_generic_support' => "pharma hack entries in options wp table",
-    'widget_generic_support' => "pharma hack entries in options wp table",
-    'ftp_credentials' => "pharma hack entries in options wp table",
-    'fwp' => "pharma hack entries in options wp table",
-    'rss_%' => "pharma hack entries in options wp table",
-    'edoced_46esab(lave' => "value in wp_options table"
 );
 ?>

@@ -31,6 +31,7 @@
  * i = scan for fake images (php scripts with image filename/extension)
  * x = try to fix the code (highly experimental...)
  * l = create local log file
+ * t = test mode, calculate hit rate for files
  *
  * Original work by: George Dimitrakopoulos 2015
  * Refactor and upgrade: Zsombor Paroczi
@@ -39,7 +40,6 @@
  **********************************/
 
 include_once('lib/logger.php');
-include_once('lib/patterns.php');
 include_once('lib/scanner.php');
 
 $log = new Logger();
@@ -137,8 +137,7 @@ if (!file_exists($o2s)) {
     exit(-1);
 }
 
-$log->logHeader();
-
+//init scanner
 if (is_dir($o2s)) {
     $scanner = new Scanner($scannerOptions);
     $scanner->getDirContents($o2s, true);
@@ -147,6 +146,22 @@ if (is_dir($o2s)) {
     $scanner->addFileToScan($o2s);
 }
 
+//add steps
+include_once('lib/step_simplestring.php');
+$scanner->addStep(new StepSimplestring($scanner));
+include_once('lib/step_simplepattern.php');
+$scanner->addStep(new StepSimplepattern($scanner));
+include_once('lib/step_preg.php');
+$scanner->addStep(new StepPreg($scanner));
+
+
+//run scan
+$log->logHeader();
+
+//parse in steps
+$scanner->prepareSteps();
+
+//real scan
 $at = 0;
 $filenum = count($scanner->files);
 $log->logNormal('Scanning: ' . $filenum . " file(s)", 0);
@@ -157,7 +172,7 @@ foreach ($scanner->files as $onefile) {
     $at++;
     $log->logUpdateStatus($filenum, $at);
 }
-$log->logFooter($filenum);
+$log->logFooter($filenum,$scanner);
 
 //write log at the end
 if ($scanner->nologfile == false) {

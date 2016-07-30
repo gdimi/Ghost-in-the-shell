@@ -25,7 +25,7 @@ class Logger
         $this->laststatus = time();
     }
 
-    function logFooter($filecount)
+    function logFooter($filecount, $scanner)
     {
         $lGreen = "\033[1;32m";
         $lGray = "\033[0;37m";
@@ -33,6 +33,10 @@ class Logger
         $seconds = time() - $this->starttime;
         echo(' took: ' . date('i:s', $seconds));
         echo(" avg/file: " . number_format($seconds / $filecount, 3) . "s\n");
+        if ($scanner->testmode) {
+            echo(" hit: " . $scanner->hit . "/" . count($scanner->files) . "\n");
+            echo(" misses:\n" . $lGray . implode("\n", $scanner->miss) . "\n");
+        }
         echo($lGray);
     }
 
@@ -87,7 +91,7 @@ class Logger
 
     function logNormal($line, $padding = 2)
     {
-        if  ($this->currentfile != '') {
+        if ($this->currentfile != '') {
             if ($this->neednametoconsole) {
                 $White = "\033[1;37m";
                 $lGray = "\033[0;37m";
