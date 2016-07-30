@@ -21,7 +21,7 @@ class StepSimplepattern implements ScanStep
     {
         $ret = array();
 
-        foreach ($polycontent as $number => $line) {
+        foreach ($polycontent as $line_num => $line) {
             foreach ($this->data as $pattern => $info) {
                 if ($pos = strpos($line, $pattern)) { //$pos = character position in line
                     $chunk = substr($line, $pos, 32);
