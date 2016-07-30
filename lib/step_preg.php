@@ -7,7 +7,7 @@ class StepPreg implements ScanStep
 
     function __construct($scanner)
     {
-        include('patterns/preg.php');
+        include(__DIR__.'/../patterns/preg.php');
         $this->data = $patternPreg;
         $this->scanner = $scanner;
     }
