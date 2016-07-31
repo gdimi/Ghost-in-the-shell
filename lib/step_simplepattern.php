@@ -5,7 +5,7 @@ class StepSimplepattern implements ScanStep
     private $scanner = null;
     private $data = array();
 
-    function __construct($scanner)
+    function __construct($scanner,$log)
     {
         include(__DIR__.'/../patterns/patterns.php');
         $this->data = $patternData;

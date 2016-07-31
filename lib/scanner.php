@@ -12,7 +12,7 @@
 
 /**
  * Interface ScanStep
- *      constructor should get the Scanner object
+ *      constructor should get the Scanner object and the log
  */
 interface ScanStep
 {
@@ -59,12 +59,15 @@ class Scanner
     public $tryFixing = false;
     public $nologfile = true;
     public $testmode = false;
+    public $cachedir = '';
 
     private $steps = array();
 
 
     function __construct($scannerOptions)
     {
+        //init cachedir
+        $this->cachedir = __DIR__ . '/../cache/';
         /*analyze options if any
          *if multiple options of the same kind only the last is actually saved*/
         $optlen = strlen($scannerOptions);

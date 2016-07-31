@@ -5,7 +5,7 @@ class StepSimplestring implements ScanStep
     private $scanner = null;
     private $data = array();
 
-    function __construct($scanner)
+    function __construct($scanner,$log)
     {
         $this->data = file_get_contents(__DIR__.'/../patterns/simplestring.txt');
         $this->scanner = $scanner;

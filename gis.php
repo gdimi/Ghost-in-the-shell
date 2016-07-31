@@ -41,6 +41,7 @@
 
 include_once('lib/logger.php');
 include_once('lib/scanner.php');
+include_once('lib/php-string-diff.php');
 
 $log = new Logger();
 
@@ -121,7 +122,14 @@ function parseArguments()
                 $scannerOptions = $arga[2];
                 $o2s = $arga[3];
             } else {
-                usage();
+                //simple hack to show @usage part of this file
+                $thisfile = file_get_contents(__FILE__);
+                $thisfile = substr($thisfile, strpos($thisfile, "@usage") + 7);
+                $thisfile = substr($thisfile, 0, strpos($thisfile, "@website") - 3);
+                $thisfile = str_replace("\n * ", "\n", $thisfile);
+                $thisfile = substr($thisfile, 1);
+                echo($thisfile);
+                exit(0);
             }
         } else {
             $o2s = $arga[1];
@@ -148,23 +156,27 @@ if (is_dir($o2s)) {
 
 //add steps
 include_once('lib/step_simplestring.php');
-$scanner->addStep(new StepSimplestring($scanner));
+$scanner->addStep(new StepSimplestring($scanner,$log));
 include_once('lib/step_simplepattern.php');
-$scanner->addStep(new StepSimplepattern($scanner));
+$scanner->addStep(new StepSimplepattern($scanner,$log));
 include_once('lib/step_preg.php');
-$scanner->addStep(new StepPreg($scanner));
+$scanner->addStep(new StepPreg($scanner,$log));
+include_once('lib/step_wp.php');
+$scanner->addStep(new StepWP($scanner,$log));
+include_once('lib/step_comments.php');
+$scanner->addStep(new StepComments($scanner,$log));
 
 
 //run scan
+$filenum = count($scanner->files);
 $log->logHeader();
+$log->logNormal('Scanning: ' . $filenum . " file(s)", 0);
 
 //parse in steps
 $scanner->prepareSteps();
 
 //real scan
 $at = 0;
-$filenum = count($scanner->files);
-$log->logNormal('Scanning: ' . $filenum . " file(s)", 0);
 foreach ($scanner->files as $onefile) {
     $log->logFilename($onefile);
     $scanner->setNewf2s($onefile);

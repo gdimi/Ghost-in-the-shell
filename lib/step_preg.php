@@ -5,7 +5,7 @@ class StepPreg implements ScanStep
     private $scanner = null;
     private $data = array();
 
-    function __construct($scanner)
+    function __construct($scanner,$log)
     {
         include(__DIR__.'/../patterns/preg.php');
         $this->data = $patternPreg;
@@ -24,6 +24,11 @@ class StepPreg implements ScanStep
         //all data
         foreach ($polycontent as $line_num => $line) {
             foreach ($this->data as $regexp => $message) {
+                //fix for variable function call
+                if ($message == 'call variable function'){
+                    $line = $content[$line_num];
+                }
+
                 if (preg_match($regexp, $line, $matches)) {
                     $ret[] = array(
                         'line' => $line_num,
