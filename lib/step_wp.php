@@ -68,7 +68,7 @@ class StepWP implements ScanStep
             $f1e = explode("/", $f1);
             if ((count($f1e)>4) &&($f1e[count($f1e) - 4] == 'wp-content') && ($f1e[count($f1e) - 3] == 'plugins')) {
                 $file = file_get_contents($f1);
-                if (preg_match('/Version:[[:space:]]*([0-9.]*)/i', $file, $matches)) {
+                if ((strpos($file,'Plugin Name:')>0) && (preg_match('/Version:[[:space:]]*([0-9.]*)/i', $file, $matches))) {
                     $ver = $matches[1];
                     $plugin = $f1e[count($f1e) - 2];
 
