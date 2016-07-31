@@ -23,7 +23,7 @@ class StepWP implements ScanStep
             if (substr($f1, -23) == 'wp-includes/version.php') {
                 $file = file_get_contents($f1);
                 if (preg_match('/\$wp_version[ ]*\=[ ]*[\'"]([0-9.]*)[\'"]/i', $file, $matches)) {
-                    $basedir = substr($f1, 0, strlen($basedir) - 23);
+                    $basedir = substr($f1, 0, strlen($f1) - 23);
                     $ver = $matches[1];
                     $downloadurl = 'https://wordpress.org/wordpress-';
 
