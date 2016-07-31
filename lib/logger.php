@@ -32,10 +32,12 @@ class Logger
         echo($lGreen . "GIS ended: " . date('Y-m-d H:i:s'));
         $seconds = time() - $this->starttime;
         echo(' took: ' . date('i:s', $seconds));
-        echo(" avg/file: " . number_format($seconds / $filecount, 3) . "s\n");
-        if ($scanner->testmode) {
-            echo(" hit: " . $scanner->hit . "/" . count($scanner->files) . "\n");
-            echo(" misses:\n" . $lGray . implode("\n", $scanner->miss) . "\n");
+        if ($filecount > 0) {
+            echo(" avg/file: " . number_format($seconds / $filecount, 3) . "s\n");
+            if ($scanner->testmode) {
+                echo(" hit: " . $scanner->hit . "/" . count($scanner->files) . "\n");
+                echo(" misses:\n" . $lGray . implode("\n", $scanner->miss) . "\n");
+            }
         }
         echo($lGray);
     }
