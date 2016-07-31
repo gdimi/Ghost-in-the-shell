@@ -36,7 +36,10 @@ class StepComments implements ScanStep
             }
 
             $tokens = token_get_all(implode("\n", $content));
-            foreach ($tokens as $t1) {
+            foreach ($tokens as $t1)
+                if (!is_array($t1)) {
+                    continue;
+                }
                 //ignore T_WHITESPACE
                 if ($t1[0] == 377) {
                     continue;
