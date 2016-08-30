@@ -29,6 +29,7 @@ $patternData = array(
     '7P15f9s4kjgO'=>"gzbase64.inject.unclassed",
     '$gSQLMaxRows,$gSQLBlockRows,$ADODB_ROUND' => "Fake ADODB library malware",
     'HHHHOOOoooo0000N",$check);' => "Mass mail sender",
+    'move_uploaded_file($_FILES["filename"]["tmp_name"], $_FILES["filename"]["name"])' => 'Generic file uploader',
     '@eval(gzinflate(base64_decode($error)));'=>"gzbase64.inject.unclassed",
     'GIF89a<?php eval(gzinflate(str_rot13(base64_decode('=>"fake gif",
     ");}dnnViewState();"=>"javascript SEO spam",
