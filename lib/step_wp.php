@@ -128,16 +128,30 @@ class StepWP implements ScanStep
             if (substr($filename, 0, strlen($basedir)) == $basedir) {
                 $wpfile = substr($filename, strlen($basedir));
 
+                //ignore .htacess and wp-config.php
+                if (($wpfile == ".htaccess") || ($wpfile == 'wp-config.php')){
+                    return $ret;
+                }
+
                 //treat wp content differently
                 if (substr($wpfile, 0, 11) == 'wp-content/') {
                     //TODO
                 } else {
                     $originalfile = $this->zipfiles['wordpress-' . $ver . '.zip']->getFromName('wordpress/' . $wpfile);
+                    $purefile = $originalfile;
                     if ($originalfile === FALSE) {
-                        $ret[] = array(
-                            'message' => "Extra file in WP",
-                            'sure' => 80
-                        );
+                        if ($this->scanner->tryFixing==true){
+                            $ret[] = array(
+                                'message' => "Extra file in WP - file deleted",
+                                'sure' => 80
+                            );
+                            @unlink($filename);
+                        }else{
+                            $ret[] = array(
+                                'message' => "Extra file in WP",
+                                'sure' => 80
+                            );
+                        }
                     } else {
                         $originalfile = str_replace(array("\r"), '', $originalfile);
                         $nolines = implode("\n", $content);
@@ -153,11 +167,18 @@ class StepWP implements ScanStep
                         } else {
                             $opcodes = FineDiff::getDiffOpcodes($nolines, $originalfile, FineDiff::$wordGranularity);
                             $to_text = FineDiff::renderToTextFromOpcodes($nolines, $opcodes);
-                            $ret[] = array(
-                                'message' => "WP core file changed\n" . substr($to_text, 0, strlen($to_text) - 1),
-                                'sure' => 80
-                            );
-
+                            if ($this->scanner->tryFixing==true) {
+                                $ret[] = array(
+                                    'message' => "WP core file changed - replacing with original\n" . substr($to_text, 0, strlen($to_text) - 1),
+                                    'sure' => 80
+                                );
+                                @file_put_contents($filename,$purefile);
+                            }else{
+                                $ret[] = array(
+                                    'message' => "WP core file changed\n" . substr($to_text, 0, strlen($to_text) - 1),
+                                    'sure' => 80
+                                );
+                            }
                         }
                     }
                 }
@@ -168,11 +189,21 @@ class StepWP implements ScanStep
             if (substr($filename, 0, strlen($basedir)) == $basedir) {
                 $wpfile = $info['name'] . substr($filename, strlen($basedir));
                 $originalfile = $info['zip']->getFromName($wpfile);
+                $purefile = $originalfile;
+
                 if ($originalfile === FALSE) {
-                    $ret[] = array(
-                        'message' => "Extra file in plugin " . $info['name'],
-                        'sure' => 80
-                    );
+                    if ($this->scanner->tryFixing==true){
+                        $ret[] = array(
+                            'message' => "Extra file in plugin " . $info['name']." - file deleted",
+                            'sure' => 80
+                        );
+                        @unlink($filename);
+                    }else{
+                        $ret[] = array(
+                            'message' => "Extra file in WP",
+                            'sure' => 80
+                        );
+                    }
                 } else {
                     $originalfile = str_replace(array("\r"), '', $originalfile);
                     $nolines = implode("\n", $content);
@@ -186,10 +217,19 @@ class StepWP implements ScanStep
                         $opcodes = FineDiff::getDiffOpcodes($nolines, $originalfile, FineDiff::$wordGranularity);
                         $to_text = FineDiff::renderToTextFromOpcodes($nolines, $opcodes);
 
-                        $ret[] = array(
-                            'message' => "Plugin file changed " . $info['name'] . "\n" . substr($to_text, 0, strlen($to_text) - 1),
-                            'sure' => 80
-                        );
+
+                        if ($this->scanner->tryFixing==true) {
+                            $ret[] = array(
+                                'message' => "Plugin file changed " . $info['name'] . " - replacing with original\n" . substr($to_text, 0, strlen($to_text) - 1),
+                                'sure' => 80
+                            );
+                            @file_put_contents($filename,$purefile);
+                        }else{
+                            $ret[] = array(
+                                'message' => "Plugin file changed " . $info['name'] . "\n" . substr($to_text, 0, strlen($to_text) - 1),
+                                'sure' => 80
+                            );
+                        }
                     }
                 }
             }
