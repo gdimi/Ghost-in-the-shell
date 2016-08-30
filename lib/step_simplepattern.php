@@ -32,15 +32,19 @@ class StepSimplepattern implements ScanStep
                         'sure' => 80
                     );
 
+                    if (($info == 'Mass mail sender') && ($this->scanner->tryFixing)) {
+                        @unlink($filename);
+                    }
+
                     //small fix for backdoor str_rot13
                     if (($info == 'php.backdoor.str_rot13.001') && ($this->scanner->tryFixing)) {
                         $contents = file_get_contents($filename);
                         $contents = preg_replace('/\n\/\/###\=\=###[\s\S]+?\/\/###\=\=###\n/s', '', $contents);
-                        file_put_contents($filename, $contents);
+                        @file_put_contents($filename, $contents);
                     }
 
                     if (($info == 'Remote downloader malware') && ($this->scanner->tryFixing)) {
-                        unlink($filename);
+                        @unlink($filename);
                     }
                 }
             }

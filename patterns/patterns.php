@@ -28,6 +28,7 @@ $patternData = array(
     'LNX RooT'=>'php uploader max',
     '7P15f9s4kjgO'=>"gzbase64.inject.unclassed",
     '$gSQLMaxRows,$gSQLBlockRows,$ADODB_ROUND' => "Fake ADODB library malware",
+    'HHHHOOOoooo0000N",$check);' => "Mass mail sender",
     '@eval(gzinflate(base64_decode($error)));'=>"gzbase64.inject.unclassed",
     'GIF89a<?php eval(gzinflate(str_rot13(base64_decode('=>"fake gif",
     ");}dnnViewState();"=>"javascript SEO spam",
