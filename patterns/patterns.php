@@ -42,6 +42,6 @@ $patternData = array(
     'extract($_'=>"extract trick on some global object",
     'base64_decode'=>"general base64_decode check",
     '/rjbvcxwre/456vcxgrt.php' => 'Remote downloader malware',
-    '!<div id="wp_cd_code">(.*?)</div>!s' => 'Wp POST leak hack'
+    '"wp_cd_code">(.*?)</div>!s' => 'Wp POST leak hack'
 );
 ?>
