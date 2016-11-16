@@ -35,7 +35,7 @@ class StepComments implements ScanStep
                 return;
             }
 
-            $tokens = token_get_all(implode("\n", $content));
+            $tokens = @token_get_all(implode("\n", $content));
             foreach ($tokens as $t1) {
                 if (!is_array($t1)) {
                     continue;

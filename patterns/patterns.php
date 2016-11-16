@@ -38,9 +38,10 @@ $patternData = array(
     '$k="ass"."ert"'=>'allows a remote attacker to run any code on your site',
     '*///istart'=> 'pseudo darkleech variant.See https://blog.sucuri.net/2015/03/pseudo-darkleech-server-root-infection.html',
     'passssword'=> 'pseudo darkleech variant',
-    'eval('=>"general eval check",
+    //'eval('=>"general eval check",
     'extract($_'=>"extract trick on some global object",
     'base64_decode'=>"general base64_decode check",
-    '/rjbvcxwre/456vcxgrt.php' => 'Remote downloader malware'
+    '/rjbvcxwre/456vcxgrt.php' => 'Remote downloader malware',
+    '!<div id="wp_cd_code">(.*?)</div>!s' => 'Wp POST leak hack'
 );
 ?>
