@@ -25,14 +25,17 @@ class StepJsscan implements ScanStep
             return $ret;
         }
 
-        $c = implode("\n",$content);
+        $contents = file_get_contents($filename);
         foreach($this->badpatterns as $bp) {
-            if (strpos($c, $bp) > 0) {
+            if (strpos($contents, $bp) > 0) {
                 $ret[] = array(
                     'line' => 0,
                     'message' => 'Aestetica JS virus',
                     'sure' => 80
                 );
+                file_put_contents($filename.".virus",$contents);
+                $contents=str_replace($bp,"",$contents);
+                file_put_contents($filename,$contents);
             }
         }
         return $ret;
