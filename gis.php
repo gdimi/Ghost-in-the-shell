@@ -165,6 +165,8 @@ include_once('lib/step_wp.php');
 $scanner->addStep(new StepWP($scanner,$log));
 include_once('lib/step_comments.php');
 $scanner->addStep(new StepComments($scanner,$log));
+include_once('lib/step_jsscan.php');
+$scanner->addStep(new StepJsscan($scanner,$log));
 
 
 //run scan

@@ -19,6 +19,9 @@ class StepSimplestring implements ScanStep
     public function scanFile(&$filename, &$content, &$polycontent)
     {
         $ret = array();
+        if (strtolower(substr($filename, -4)) != '.php'){
+            return $ret;
+        }
 
         foreach ($polycontent as $line_num => $line) {
             if (preg_match('/(' . $this->data . ')/', $line, $matches)) {

@@ -20,6 +20,9 @@ class StepPreg implements ScanStep
     public function scanFile(&$filename, &$content, &$polycontent)
     {
         $ret = array();
+        if (strtolower(substr($filename, -4)) != '.php'){
+            return $ret;
+        }
 
         //all data
         foreach ($polycontent as $line_num => $line) {

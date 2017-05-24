@@ -118,7 +118,8 @@ class Scanner
                             $this->getDirContents($path . '/' . $file, true);
                         } else {
                             if (($this->allFiles == true) ||
-                                (strtolower(substr($file, -3)) == 'php') ||
+                                (strtolower(substr($file, -3)) == '.js') ||
+                                (strtolower(substr($file, -4)) == '.php') ||
                                 (($this->fakeImages) && (
                                         (in_array(strtolower(substr($file, -3)), $this->imgexts)) ||
                                         (in_array(strtolower(substr($file, -4)), $this->imgexts))))

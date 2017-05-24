@@ -21,6 +21,9 @@ class StepComments implements ScanStep
 
     public function whitelistFile(&$filename, &$content, &$polycontent, &$markers)
     {
+        if (strtolower(substr($filename, -4)) != '.php'){
+            return;
+        }
         $tokensbyline = array();
         if (count($markers) > 0) {
             //doublecheck for tokens
