@@ -19,8 +19,9 @@ php gis.php -<options> file_or_dir_to_scan
 f = full log  
 n = filename only log  
 j = json format log  
-o = no logfile creation
+o = no logfile creation 
 s = silent, no output  
+p = print filenames being scanned instead of dots
 a = scan all files not only php  
 i = scan for fake images (php scripts with image filename/extension)  
 
