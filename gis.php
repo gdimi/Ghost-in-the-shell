@@ -541,19 +541,21 @@ if (file_exists($o2s)) {
 		$counter = 0;
         $firstDigit = substr($totalFiles,0,1);
 		foreach ($scanner->files as $key=>$val) {
+			$counter++;
 			if (is_array($val)) {
 				foreach ($val as $k2=>$v2) {
 					$f2s = $key.'/'.$v2; //key is path, v2 is filename
 					if (substr($f2s,-3) == 'php' && substr($f2s,-7) != 'gis.php') {
-						if (!$htmlMode && $scanner->getOutput() != 'silent') {
-							$counter++;
-							$perc = round((100*($counter/$totalFiles)), 1, PHP_ROUND_HALF_EVEN); //TODO find out why there are x2 checks???
-							$modulo = fmod($perc,$firstDigit);
-							if ($modulo == 0) {
-								//fwrite(STDOUT,$perc."%..");
-								fwrite(STDOUT,"..");
-							}
-						}
+                                                if (!$htmlMode && $scanner->getOutput() != 'silent') {
+							//display percentage and a progress bar
+							$perc = round((100*($counter/$totalFiles)), 0, PHP_ROUND_HALF_EVEN); //TODO find out why there are x2 checks???
+                                                        for($b=0;$b <= $perc;$b++) {
+                                                          $blocks .= "█";
+                                                        }
+                                                        fwrite(STDOUT,"\r ${perc}% ".$blocks);
+                                                        $blocks = '';
+                                                }
+
 						//$output .= 'File: '.$f2s.PHP_EOL;
 						$scanner->setNewf2s($f2s);
 						$scanner->scanFile("all");
