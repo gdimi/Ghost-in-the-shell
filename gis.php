@@ -36,9 +36,10 @@ f = full log
 n = filename only log
 j = json format log
 s = silent, no output
+o = no logfile creation
+p = print filename being scanned instead of dots
 a = scan all files not only php
 i = scan for fake images (php scripts with image filename/extension)
-o = no logfile creation
 **********************************/
 
 $version = "0.71";
