@@ -548,7 +548,7 @@ if (file_exists($o2s)) {
 					if (substr($f2s,-3) == 'php' && substr($f2s,-7) != 'gis.php') {
                                                 if (!$htmlMode && $scanner->getOutput() != 'silent') {
 							//display percentage and a progress bar
-							$perc = round((100*($counter/$totalFiles)), 0, PHP_ROUND_HALF_EVEN); //TODO find out why there are x2 checks???
+							$perc = round((100*($counter/$totalFiles)), 0, PHP_ROUND_HALF_EVEN);
                                                         for($b=0;$b <= $perc;$b++) {
                                                           $blocks .= "█";
                                                         }
