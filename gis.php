@@ -41,7 +41,7 @@ i = scan for fake images (php scripts with image filename/extension)
 o = no logfile creation
 **********************************/
 
-$version = "0.70";
+$version = "0.71";
 
 //data to test
 $stringData = 'r0nin|m0rtix|upl0ad|r57shell|c99shell|shellbot|phpshell|void\.ru|phpremoteview|directmail|bash_history|multiviews|cwings|vandal|bitchx|eggdrop|guardservices|psybnc|dalnet|undernet|vulnscan|spymeta|raslan58|Webshell|str_rot13|FilesMan|FilesTools|Web Shell|ifrm|bckdrprm|hackmeplz|wrgggthhd|WSOsetcookie|Hmei7|Inbox Mass Mailer|HackTeam|Hackeado|INVISION POWER BOARD|\$GLOBALS\[\'(.*)\'\];global\$(.*);\$';
@@ -96,7 +96,7 @@ $patternData = [
 ];
 
 $fileData = [
-	'.general25.php' => "originaly a mailpoet wp plugin exploit. Infests files with eval'd code and adds a user 1001001 in database",
+	'.general2?.php' => "originaly a mailpoet wp plugin exploit. Infests files with eval'd code and adds a user 1001001 in database",
 	'.system10.php' => "",
 	'.press.php' => "",
 	'.system.php' => "",
