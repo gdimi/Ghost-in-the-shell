@@ -90,6 +90,7 @@ $patternData = [
 	'$dc=strrev("edoced_46esab")'=>'easy to guess: its a reversed base64_decode! nice try jackass...',
 	'@eval($_POST["err"]);?>45000'=>'eval any php command posted.No clue as to what 45000 is...',
 	"empty($_GET['ineedthispage'])){ini_set('display_errors'" => "hacktool joomla mainly",
+	"'Wi'.'ndo.'.'ws-12'.'51'" => "mosimage backdoor",
 	'eval('=>"general eval check",
 	'base64_decode'=>"general base64_decode check"
 ];
