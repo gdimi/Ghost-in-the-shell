@@ -595,7 +595,7 @@ if (file_exists($o2s)) {
                                                         	fwrite(STDOUT,"\r ${perc}% ".$blocks);
                                                         	$blocks = '';
 							}
-                                                }
+                                                
 
 						//$output .= 'File: '.$f2s.PHP_EOL;
 						$scanner->setNewf2s($f2s);
