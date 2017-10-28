@@ -349,6 +349,38 @@ class Scanner {
 		}
 	}
 
+	public function getOption($option) {
+		/*returns option value*/
+		switch($option) {
+			case "flog": // = full log
+				return $this->lparms;
+				break;
+			case "fnameonlylog": //= filename only log
+				return $this->lparms;
+				break;
+			case "jsonlog": //= json format log
+				return $this->lparms;
+				break;
+			case "silent": //= silent output
+				return $this->silent;
+				break;
+			case "allfiles": //= scan all files not only php
+				return $this->allFiles;
+				break;
+			case "fakeimages": //= scan for fake images (php scripts with image filename/extension)
+				return $this->fakeImages;
+				break;
+			case "nolog": //= no log file creation
+				return $this->nologfile;
+				break;
+			case "filenames": //= show filenames instead of percentage
+				return $this->showfiles;
+				break;
+			default:
+				continue;
+		}
+	}
+	
 	public function setOutput($output) {
 		/* sets the output
 		 * notice: this function doesnt affect the forceHtml option*/
