@@ -585,13 +585,16 @@ if (file_exists($o2s)) {
 					$f2s = $key.'/'.$v2; //key is path, v2 is filename
 					if (substr($f2s,-3) == 'php' && substr($f2s,-7) != 'gis.php') {
                                                 if (!$htmlMode && $scanner->getOutput() != 'silent') {
-							//display percentage and a progress bar
-							$perc = round((100*($counter/$totalFiles)), 0, PHP_ROUND_HALF_EVEN);
-                                                        for($b=0;$b <= $perc;$b++) {
-                                                          $blocks .= "█";
-                                                        }
-                                                        fwrite(STDOUT,"\r ${perc}% ".$blocks);
-                                                        $blocks = '';
+							if ($scanner->getOption("filenames") == true) {
+								fwrite(STDOUT,$f2s.PHP_EOL);
+							} else {
+								//display percentage and a progress bar
+								$perc = round((100*($counter/$totalFiles)), 0, PHP_ROUND_HALF_EVEN);
+                                                        	for($b=0;$b <= $perc;$b++) {
+                                                          	$blocks .= "█";
+                                                        	fwrite(STDOUT,"\r ${perc}% ".$blocks);
+                                                        	$blocks = '';
+							}
                                                 }
 
 						//$output .= 'File: '.$f2s.PHP_EOL;
