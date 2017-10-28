@@ -591,12 +591,13 @@ if (file_exists($o2s)) {
 								//display percentage and a progress bar
 								$perc = round((100*($counter/$totalFiles)), 0, PHP_ROUND_HALF_EVEN);
                                                         	for($b=0;$b <= $perc;$b++) {
-                                                          	$blocks .= "█";
+                                              		            	$blocks .= "█";
+								}
                                                         	fwrite(STDOUT,"\r ${perc}% ".$blocks);
                                                         	$blocks = '';
 							}
                                                 
-
+						}	
 						//$output .= 'File: '.$f2s.PHP_EOL;
 						$scanner->setNewf2s($f2s);
 						$scanner->scanFile("all");
