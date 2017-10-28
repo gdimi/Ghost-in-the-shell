@@ -92,6 +92,7 @@ $patternData = [
 	'@eval($_POST["err"]);?>45000'=>'eval any php command posted.No clue as to what 45000 is...',
         'empty($_GET[\'ineedthispage\'])){ini_set(\'display_errors\'' => "hacktool joomla mainly",
 	"'Wi'.'ndo.'.'ws-12'.'51'" => "mosimage backdoor",
+	"eval($mdh($md(strrev('/" => "php malware",
 	'eval('=>"general eval check",
 	'base64_decode'=>"general base64_decode check"
 ];
