@@ -145,6 +145,7 @@ class Scanner {
 	private $forceHtml = false;
 	private $nologfile = false;
 	private $silent = false;
+	private $showfiles = false;
 	private $output = 'cli'; //cli,html,silent
 
 
@@ -321,6 +322,9 @@ class Scanner {
 						break;
 					case "o": //= no log file creation
 						$this->nologfile = true;
+						break;
+					case "p": //= show filenames instead of percentage
+						$this->showfiles = true;
 						break;
 					default:
 						continue;
