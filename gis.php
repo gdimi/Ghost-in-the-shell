@@ -540,7 +540,8 @@ if (file_exists($o2s)) {
 			fwrite(STDOUT,"Scanning ".$totalFiles." files".PHP_EOL);
 		}
 		$counter = 0;
-        $firstDigit = substr($totalFiles,0,1);
+	        $blocks = '';
+                //$firstDigit = substr($totalFiles,0,1);
 		foreach ($scanner->files as $key=>$val) {
 			$counter++;
 			if (is_array($val)) {
