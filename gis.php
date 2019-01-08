@@ -94,7 +94,8 @@ $patternData = [
 	"'Wi'.'ndo.'.'ws-12'.'51'" => "mosimage backdoor",
 	"eval($mdh($md(strrev('/" => "php malware",
 	'eval('=>"general eval check",
-	'base64_decode'=>"general base64_decode check"
+	'base64_decode'=>"general base64_decode check",
+	'gzinflate('=>"general gzinflate check"
 ];
 
 $fileData = [
