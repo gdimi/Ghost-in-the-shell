@@ -95,7 +95,8 @@ $patternData = [
 	"eval($mdh($md(strrev('/" => "php malware",
 	'eval('=>"general eval check",
 	'base64_decode'=>"general base64_decode check",
-	'gzinflate('=>"general gzinflate check"
+	'gzinflate('=>"general gzinflate check",
+	'@include'=>"hidden include from file"
 ];
 
 $fileData = [
