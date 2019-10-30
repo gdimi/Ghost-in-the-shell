@@ -750,7 +750,7 @@ if ((is_object($scanner) && $scanner->getOutput() == 'html') || $htmlMode) { ?>
 		}
 	}
 	echo PHP_EOL.PHP_EOL;
-	echo "v$version by George Dimitrakopoulos 2015-2017".PHP_EOL;
+	echo "v$version by George Dimitrakopoulos 2015-2019".PHP_EOL;
   }
 }
 ?>
