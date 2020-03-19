@@ -97,7 +97,8 @@ $patternData = [
 	'base64_decode'=>"general base64_decode check",
 	'gzinflate('=>"general gzinflate check",
 	'@include'=>"hidden include from file",
-	'gagal'=>"injected form in joomla admin theme"
+	'gagal'=>"injected form in joomla admin theme",
+	'yumingid'=>"injected obscured php code"
 ];
 
 $fileData = [
