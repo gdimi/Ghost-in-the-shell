@@ -98,7 +98,8 @@ $patternData = [
 	'gzinflate('=>"general gzinflate check",
 	'@include'=>"hidden include from file",
 	'gagal'=>"injected form in joomla admin theme",
-	'yumingid'=>"injected obscured php code"
+	'yumingid'=>"injected obscured php code",
+	"@'$"=>"injected obscured php code"
 ];
 
 $fileData = [
@@ -118,6 +119,8 @@ $fileData = [
 	'php_http_server_generic.php'=>"obscure file, maybe what it says!",
 	'general-klausel.php'=>"darkleech variant",
 	'generalklausel.php'=>"darkleech variant",
+	'wp-config-sapleBACKUP.php'=>"used to override config of a wordpress site",
+	'wp-config-sampleBACKUP.php'=>"used to override config of a wordpress site",
 	'.*' => "dot file"
 ];
 
@@ -131,7 +134,7 @@ $dbData = [
 	'ftp_credentials' => "pharma hack entries in options wp table",
 	'fwp' => "pharma hack entries in options wp table",
 	'rss_%' => "pharma hack entries in options wp table",
-    'edoced_46esab(lave' => "value in wp_options table"
+        'edoced_46esab(lave' => "value in wp_options table"
 ];
 
 
