@@ -4,7 +4,7 @@
  * a php file security scanner
  * by George Dimitrakopoulos 2015-2022
  * version 0.76alpha
- * last modified 2022-01-30 13:26 UTC+2
+ * last modified 2022-01-30 22:46 UTC+2
 @copyright
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -717,7 +717,7 @@ if ((is_object($scanner) && $scanner->getOutput() == 'html') || $htmlMode) { ?>
 				} ?>
 			</div>
 		</section>
-		<footer><pre>v<?php echo $version; ?> By George Dimitrakopoulos 2015-2017</pre></footer>
+		<footer><pre>v<?php echo $version; ?> By George Dimitrakopoulos 2015-2022. Some rights reserved. gdimi@frantic-bytes.gr</pre></footer>
 	</body>
 </html>
 <?php 
@@ -754,7 +754,7 @@ if ((is_object($scanner) && $scanner->getOutput() == 'html') || $htmlMode) { ?>
 		}
 	}
 	echo PHP_EOL.PHP_EOL;
-	echo "v$version by George Dimitrakopoulos 2015-2019".PHP_EOL;
+	echo "v$version by George Dimitrakopoulos 2015-2022. Some rights reserved. gdimi@frantic-bytes.gr".PHP_EOL;
   }
 }
 ?>
