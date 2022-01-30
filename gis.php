@@ -98,7 +98,9 @@ $patternData = [
 	'@include'=>"hidden include from file",
 	'gagal'=>"injected form in joomla admin theme",
 	'yumingid'=>"injected obscured php code",
-	"@'$"=>"injected obscured php code"
+	"@'$"=>"injected obscured php code",
+	'/rjbvcxwre/456vcxgrt.php' => 'Remote downloader malware',
+	'extract($_'=>"extract trick on some global object"
 ];
 
 $fileData = [
