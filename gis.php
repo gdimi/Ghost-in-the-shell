@@ -334,8 +334,6 @@ class Scanner {
 					case "p": //= show filenames instead of percentage
 						$this->showfiles = true;
 						break;
-					default:
-						continue;
 				}
 			}
 		}
@@ -384,8 +382,6 @@ class Scanner {
 			case "filenames": //= show filenames instead of percentage
 				return $this->showfiles;
 				break;
-			default:
-				continue;
 		}
 	}
 	
